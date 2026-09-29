@@ -1493,6 +1493,10 @@ const FILTER_CONFIGS = [
   { key:'pedido', label:'Pedido fábrica', get:r=>r.pedido, staticValues:['si','no'], fmt:v=>v==='si'?'Con pedido':'Sin pedido' },
   { key:'confirmacion', label:'Confirmación entrega', get:r=> r.fConfirm ? 'si':'no', staticValues:['si','no'], fmt:v=>v==='si'?'Confirmada':'Sin confirmar' },
   { key:'mes', label:'Mes apertura', get:r=>r.mesApertura, fmt:m=> m ? `${MESES[parseInt(m.slice(5,7))-1]} ${m.slice(0,4)}` : m },
+  // Mes de la fecha de facturación real. Solo en los módulos que incluyen órdenes facturadas.
+  { key:'mesFact', label:'Mes facturación', onlyNs:['ejecutivo','resumen','trackeo','accesorios'],
+    get:r=> (r.fFacturacion && fechaRazonable(r.fFacturacion)) ? r.fFacturacion.slice(0,7) : (r.estado==='Facturada' ? '(Facturada sin fecha)' : '(Sin facturar)'),
+    fmt:m=> /^\d{4}-\d{2}$/.test(m) ? `${MESES[parseInt(m.slice(5,7))-1]} ${m.slice(0,4)}` : m },
   { key:'estadoPedido', label:'Estado pedido', get:r=>r.estadoPedido || '(Sin estado)' },
 ];
 
@@ -1526,6 +1530,7 @@ function buildFilterOptions(){
   NS_LIST.forEach(ns => {
     const base = baseRowsFor(ns);
     FILTER_CONFIGS.forEach(cfg => {
+      if(cfg.onlyNs && !cfg.onlyNs.includes(ns)) return; // filtro que no aplica a este módulo
       const values = cfg.staticValues ? cfg.staticValues : [...new Set(base.map(cfg.get))].filter(v=>v!==null && v!==undefined && v!=='').sort();
       cfgValues[ns][cfg.key] = values;
       renderMultiSelect(ns, cfg);
