@@ -342,7 +342,7 @@ tbody tr:hover{background:var(--surface-alt);}
     </button>
     <div class="msel-panel" id="settingsPanel" style="width:340px;padding:14px;">
       <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">Conectar con Apps Script</div>
-      <div style="font-size:11.5px;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">Pegá acá la URL de tu Web App de Apps Script para que la base quede guardada en Google Sheets y se comparta entre todos.</div>
+      <div style="font-size:11.5px;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">El tablero ya trae cargada una URL de Apps Script por defecto (no hace falta pegarla cada vez). Usá esto solo si necesitás apuntar a otra URL en este navegador.</div>
       <input type="text" id="gasUrlInput" placeholder="https://script.google.com/macros/s/..." style="width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface-alt);color:var(--text);font-size:12.5px;font-family:'Inter';margin-bottom:10px;">
       <div style="display:flex;gap:8px;">
         <button type="button" id="gasUrlSave" style="flex:1;background:var(--accent);color:#12151F;border:none;padding:8px;border-radius:8px;font-weight:700;font-size:12.5px;cursor:pointer;">Guardar</button>
@@ -1156,13 +1156,21 @@ function handleFile(file){
 
 /* ============ SYNC CON APPS SCRIPT ============ */
 const GAS_KEY = 'tablero_taller_gas_url';
+// URL de Apps Script por defecto: queda embebida en el archivo para que el tablero
+// funcione en cualquier navegador/dispositivo sin tener que cargarla a mano cada vez.
+// Si alguna vez redeployás el script y la URL cambia, actualizá esta línea (o usá el
+// engranaje ⚙ para sobreescribirla solo en tu navegador actual).
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxJkVi1SCNbKF9Q-11OfZrUf1_9VhvvtE1XjYeU_qBxws1LhqKoKW9DmiZZVgW6kFwUGg/exec';
 const settingsMenu = document.getElementById('settingsMenu');
 const settingsToggle = document.getElementById('settingsToggle');
 const gasUrlInput = document.getElementById('gasUrlInput');
 const syncBadge = document.getElementById('syncBadge');
 const syncText = document.getElementById('syncText');
 
-function getGasUrl(){ return (localStorage.getItem(GAS_KEY) || '').trim(); }
+function getGasUrl(){
+  const stored = (localStorage.getItem(GAS_KEY) || '').trim();
+  return stored || DEFAULT_GAS_URL;
+}
 
 function updateSyncBadge(status){
   // status: 'off' (sin configurar), 'on' (conectado), 'error', 'loading'
@@ -1186,8 +1194,8 @@ document.getElementById('gasUrlSave').addEventListener('click', () => {
 });
 document.getElementById('gasUrlClear').addEventListener('click', () => {
   localStorage.removeItem(GAS_KEY);
-  gasUrlInput.value = '';
-  updateSyncBadge('off');
+  gasUrlInput.value = getGasUrl(); // vuelve a mostrar la URL por defecto embebida
+  loadFromGAS();
   settingsMenu.classList.remove('open');
 });
 
@@ -1431,6 +1439,15 @@ function syncMultiSelectUI(ns, cfg){
 
 document.addEventListener('click', (e) => document.querySelectorAll('.msel.open').forEach(o => { if(!o.contains(e.target)) o.classList.remove('open'); }));
 
+/** Evita reconstruir cards/gráficos/tabla en cada tecla tipeada en un buscador: espera una pausa breve. */
+function debounce(fn, wait = 250){
+  let t;
+  return function(...args){
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
 function clearFiltersFor(ns){
   FILTER_CONFIGS.forEach(cfg => { filterState[ns][cfg.key] = new Set(); syncMultiSelectUI(ns, cfg); });
   if(ns === 'resumen'){ activeStatusCardResumen = null; activeInsight = null; }
@@ -1449,7 +1466,7 @@ document.getElementById('clearFilters-trackeo').addEventListener('click', () => 
 document.getElementById('clearFilters-accesorios').addEventListener('click', () => clearFiltersFor('accesorios'));
 document.getElementById('clearFilters-garantia').addEventListener('click', () => clearFiltersFor('garantia'));
 document.getElementById('clearFilters-ejecutivo').addEventListener('click', () => clearFiltersFor('ejecutivo'));
-document.getElementById('searchBox').addEventListener('input', renderTable);
+document.getElementById('searchBox').addEventListener('input', debounce(renderTable));
 
 function nsStatusVar(ns){
   if(ns==='resumen') return {get:()=>activeStatusCardResumen, set:v=>activeStatusCardResumen=v};
@@ -1516,9 +1533,9 @@ function computeFiltered(ns){
 }
 
 function applyFilters(ns = currentView){
-  if(ns === 'resumen') FILTERED = computeFiltered('resumen');
   const base = baseRowsFor(ns);
-  const filtered = ns === 'resumen' ? FILTERED : computeFiltered(ns);
+  const filtered = computeFiltered(ns);
+  if(ns === 'resumen') FILTERED = filtered;
   const activeCount = FILTER_CONFIGS.filter(cfg => filterState[ns][cfg.key].size > 0).length
     + (nsStatusVar(ns).get() ? 1 : 0)
     + (nsInsightVar(ns).get() ? 1 : 0);
@@ -1707,7 +1724,7 @@ function renderSiniestros(){
     </tr>`;
   });
 }
-document.getElementById('siniestroSearchBox').addEventListener('input', renderSiniestros);
+document.getElementById('siniestroSearchBox').addEventListener('input', debounce(renderSiniestros));
 document.getElementById('siniestroInsightCards').addEventListener('click', e => {
   const card = e.target.closest('.insight-card');
   if(!card) return;
@@ -1885,7 +1902,7 @@ function renderPedidos(){
     </tr>`;
   });
 }
-document.getElementById('pedidoSearchBox').addEventListener('input', renderPedidos);
+document.getElementById('pedidoSearchBox').addEventListener('input', debounce(renderPedidos));
 document.getElementById('pedidoInsightCards').addEventListener('click', e => {
   const card = e.target.closest('.insight-card');
   if(!card) return;
@@ -2028,8 +2045,8 @@ function renderTrackeo(){
     </tr>`;
   });
 }
-document.getElementById('trackeoSearchBox').addEventListener('input', renderTrackeo);
-document.getElementById('atencionSearchBox').addEventListener('input', renderTrackeo);
+document.getElementById('trackeoSearchBox').addEventListener('input', debounce(renderTrackeo));
+document.getElementById('atencionSearchBox').addEventListener('input', debounce(renderTrackeo));
 
 /* ============ ACCESORIOS ============ */
 function isAccesorio(r){ return r.subtipologia.toUpperCase().includes('ACCESORIOS'); }
@@ -2181,7 +2198,7 @@ function renderAccesorios(){
       <td class="money">${fmtMoney(r.moFacturada + r.moExterna + r.matFacturado + r.matExterno)}</td>
     </tr>`);
 }
-document.getElementById('accesorioSearchBox').addEventListener('input', renderAccesorios);
+document.getElementById('accesorioSearchBox').addEventListener('input', debounce(renderAccesorios));
 document.getElementById('accesorioInsightCards').addEventListener('click', e => {
   const card = e.target.closest('.insight-card');
   if(!card) return;
@@ -2415,7 +2432,7 @@ function renderGarantia(){
       <td class="money">${fmtMoney(r.moFacturada + r.moExterna + r.matFacturado + r.matExterno)}</td>
     </tr>`);
 }
-document.getElementById('garantiaSearchBox').addEventListener('input', renderGarantia);
+document.getElementById('garantiaSearchBox').addEventListener('input', debounce(renderGarantia));
 document.getElementById('garantiaInsightCards').addEventListener('click', e => {
   const card = e.target.closest('.insight-card');
   if(!card) return;
