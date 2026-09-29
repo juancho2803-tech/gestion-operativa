@@ -259,6 +259,20 @@ tbody tr:hover{background:var(--surface-alt);}
 .pill-selector button{background:none;border:none;padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--text-dim);cursor:pointer;font-family:'Inter';}
 .pill-selector button.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow);}
 .empty-state{padding:90px 20px;text-align:center;color:var(--text-dim);}
+/* Tabla pivote: horas facturadas por asesor × período */
+.table-head{flex-wrap:wrap;}
+.pivot-table th.sticky-col,.pivot-table td.sticky-col{position:sticky;left:0;z-index:1;background:var(--surface);}
+.pivot-table thead th.sticky-col{z-index:3;background:var(--surface-alt);}
+.pivot-table tbody tr:hover td.sticky-col{background:var(--surface-alt);}
+.pivot-table th.num,.pivot-table td.num{text-align:right;}
+.pivot-table td.hcell{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);}
+.pivot-table td.hcell.vacia{color:var(--text-dim);opacity:.55;}
+.pivot-table td.col-total{font-weight:700;border-left:1px solid var(--border);border-right:1px solid var(--border);}
+.pivot-table td.asesor-link{cursor:pointer;font-weight:600;}
+.pivot-table td.asesor-link:hover{text-decoration:underline;}
+.pivot-table tr.activo td.sticky-col{box-shadow:inset 3px 0 0 var(--mod-ejecutivo);}
+.pivot-table tfoot td{position:sticky;bottom:0;z-index:1;background:var(--surface-alt);font-weight:700;padding:10px 16px;border-top:1px solid var(--border);white-space:nowrap;}
+.pivot-table tfoot td.sticky-col{z-index:2;background:var(--surface-alt);}
 .empty-state svg{opacity:.35;margin-bottom:14px;color:var(--accent);}
 .empty-state h3{font-size:15.5px;color:var(--text);margin-bottom:6px;font-family:'Space Grotesk';}
 .empty-state p{font-size:13px;max-width:340px;margin:0 auto;}
@@ -411,6 +425,30 @@ tbody tr:hover{background:var(--surface-alt);}
           <tbody id="ejecutivoTableBody"></tbody>
         </table>
         <div class="empty-state" id="ejecutivoEmptyState">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v12m0-12l-4 4m4-4l4 4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          <h3>Sin datos para mostrar</h3>
+          <p>Subí la base o ajustá los filtros de arriba.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-panel" style="margin-top:26px;">
+      <div class="table-head">
+        <h3>Horas facturadas por asesor</h3>
+        <div class="pill-selector" id="periodoAsesorSelector">
+          <button type="button" data-periodo="dia">Diario</button>
+          <button type="button" data-periodo="semana">Semanal</button>
+          <button type="button" data-periodo="mes" class="active">Mensual</button>
+        </div>
+        <span class="table-count" id="ejecutivoAsesorCount"></span>
+      </div>
+      <div class="table-scroll" style="max-height:560px;">
+        <table id="ejecutivoAsesorTable" class="pivot-table">
+          <thead id="ejecutivoAsesorHead"></thead>
+          <tbody id="ejecutivoAsesorBody"></tbody>
+          <tfoot id="ejecutivoAsesorFoot"></tfoot>
+        </table>
+        <div class="empty-state hidden" id="ejecutivoAsesorEmpty">
           <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v12m0-12l-4 4m4-4l4 4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
           <h3>Sin datos para mostrar</h3>
           <p>Subí la base o ajustá los filtros de arriba.</p>
@@ -2869,7 +2907,7 @@ function ejPeriodKey(iso, periodo){
     const day = d.getDay();
     const diff = (day===0 ? -6 : 1-day);
     const monday = new Date(d); monday.setDate(d.getDate()+diff);
-    return monday.toISOString().slice(0,10);
+    return `${monday.getFullYear()}-${String(monday.getMonth()+1).padStart(2,'0')}-${String(monday.getDate()).padStart(2,'0')}`;
   }
   if(periodo === 'anio') return iso.slice(0,4);
   return iso.slice(0,7);
@@ -2880,6 +2918,97 @@ function ejPeriodLabel(key, periodo){
   if(periodo === 'anio') return key;
   const [y,m] = key.split('-'); return `${MESES_LARGO[parseInt(m)-1]} ${y}`;
 }
+
+let periodoAsesor = 'mes'; // dia | semana | mes — independiente del selector del gráfico
+document.getElementById('periodoAsesorSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  periodoAsesor = btn.dataset.periodo;
+  document.querySelectorAll('#periodoAsesorSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  renderEjecutivoAsesores(computeFiltered('ejecutivo').filter(r => r.estado==='Facturada'));
+});
+
+/** Tabla pivote: horas facturadas por asesor en los últimos N períodos (con datos), según
+    fecha de facturación. Columnas: Total de la ventana + cada período, del más reciente al más
+    viejo. Sombreado de un solo tono proporcional a las horas (más intenso = más horas). */
+function renderEjecutivoAsesores(facturadas){
+  const N = { dia:14, semana:12, mes:12 }[periodoAsesor];
+  const nombrePeriodo = { dia:'días', semana:'semanas', mes:'meses' }[periodoAsesor];
+  const validas = facturadas.filter(r => r.fFacturacion && fechaRazonable(r.fFacturacion));
+  const sinFecha = facturadas.filter(r => !(r.fFacturacion && fechaRazonable(r.fFacturacion)));
+  const hsSinFecha = sinFecha.reduce((s,r) => s + (Number(r.horaFacturadas)||0), 0);
+  const keys = [...new Set(validas.map(r => ejPeriodKey(r.fFacturacion, periodoAsesor)))].sort().slice(-N);
+  const keySet = new Set(keys);
+  const cols = keys.slice().reverse(); // más reciente primero
+
+  const porAsesor = {};
+  validas.forEach(r => {
+    const k = ejPeriodKey(r.fFacturacion, periodoAsesor);
+    if(!keySet.has(k)) return;
+    const a = porAsesor[r.asesor] || (porAsesor[r.asesor] = { asesor:r.asesor, sucs:{}, total:0, ordenes:0, cel:{} });
+    const h = Number(r.horaFacturadas) || 0;
+    a.total += h; a.ordenes++;
+    a.sucs[r.sucursal] = (a.sucs[r.sucursal]||0) + 1;
+    const c = a.cel[k] || (a.cel[k] = { h:0, n:0 });
+    c.h += h; c.n++;
+  });
+  const filas = Object.values(porAsesor).sort((x,y) => y.total - x.total);
+  const totalGral = filas.reduce((s,a) => s + a.total, 0);
+  const maxCelda = Math.max(0, ...filas.flatMap(a => Object.values(a.cel).map(c => c.h)));
+  const fmt = h => h.toLocaleString('es-AR', { minimumFractionDigits:1, maximumFractionDigits:1 });
+  const sucPrincipal = a => Object.entries(a.sucs).sort((x,y) => y[1]-x[1]).map(e => e[0]).join(' / ');
+  const tinte = h => h > 0 && maxCelda > 0 ? `background:color-mix(in srgb, var(--mod-ejecutivo) ${Math.round(6 + 40 * h / maxCelda)}%, transparent);` : '';
+  const asesorActivo = filterState.ejecutivo.asesor.size === 1 ? [...filterState.ejecutivo.asesor][0] : null;
+
+  const vacio = !filas.length;
+  document.getElementById('ejecutivoAsesorEmpty').classList.toggle('hidden', !vacio);
+  document.getElementById('ejecutivoAsesorTable').classList.toggle('hidden', vacio);
+  document.getElementById('ejecutivoAsesorCount').textContent = vacio ? '' :
+    `${filas.length} asesor(es) · últimos ${cols.length} ${nombrePeriodo} con facturación · clic en un asesor para filtrar`
+    + (sinFecha.length ? ` · ${sinFecha.length} orden(es) facturada(s) sin fecha de facturación (${fmt(hsSinFecha)} hs) no se incluyen` : '');
+  if(vacio) return;
+
+  document.getElementById('ejecutivoAsesorHead').innerHTML = `<tr>
+    <th class="sticky-col">Asesor</th><th>Sucursal</th>
+    <th class="num">Total hs</th><th class="num">% del total</th><th class="num">Órdenes</th>
+    ${cols.map(k => `<th class="num">${ejPeriodLabel(k, periodoAsesor)}</th>`).join('')}
+  </tr>`;
+
+  document.getElementById('ejecutivoAsesorBody').innerHTML = safeRowsHtml(filas, a => {
+    const nombre = titleCase(a.asesor);
+    return `<tr class="${a.asesor===asesorActivo?'activo':''}">
+      <td class="sticky-col asesor-link" data-asesor="${encodeURIComponent(a.asesor)}" title="Filtrar el Ejecutivo por ${nombre}">${nombre}</td>
+      <td>${sucPrincipal(a)}</td>
+      <td class="num hcell col-total">${fmt(a.total)}</td>
+      <td class="num">${totalGral ? (a.total/totalGral*100).toFixed(1).replace('.',',')+'%' : '—'}</td>
+      <td class="num">${a.ordenes.toLocaleString('es-AR')}</td>
+      ${cols.map(k => { const c = a.cel[k]; const lbl = ejPeriodLabel(k, periodoAsesor);
+        return c
+          ? `<td class="num hcell" style="${tinte(c.h)}" title="${nombre} · ${lbl}: ${fmt(c.h)} hs facturadas en ${c.n} orden(es)">${fmt(c.h)}</td>`
+          : `<td class="num hcell vacia" title="${nombre} · ${lbl}: sin órdenes facturadas">—</td>`; }).join('')}
+    </tr>`;
+  });
+
+  const totCol = k => filas.reduce((s,a) => s + (a.cel[k] ? a.cel[k].h : 0), 0);
+  const ordTot = filas.reduce((s,a) => s + a.ordenes, 0);
+  document.getElementById('ejecutivoAsesorFoot').innerHTML = `<tr>
+    <td class="sticky-col">Total</td><td></td>
+    <td class="num">${fmt(totalGral)}</td><td class="num">100%</td><td class="num">${ordTot.toLocaleString('es-AR')}</td>
+    ${cols.map(k => `<td class="num">${fmt(totCol(k))}</td>`).join('')}
+  </tr>`;
+}
+
+// Clic en un asesor: filtra todo el Ejecutivo por ese asesor (clic de nuevo = quitar filtro)
+document.getElementById('ejecutivoAsesorBody').addEventListener('click', e => {
+  const td = e.target.closest('td.asesor-link');
+  if(!td) return;
+  const asesor = decodeURIComponent(td.dataset.asesor);
+  const sel = filterState.ejecutivo.asesor;
+  filterState.ejecutivo.asesor = (sel.size === 1 && sel.has(asesor)) ? new Set() : new Set([asesor]);
+  const cfg = FILTER_CONFIGS.find(c => c.key === 'asesor');
+  syncMultiSelectUI('ejecutivo', cfg);
+  applyFilters('ejecutivo');
+});
 
 document.getElementById('periodoSelector').addEventListener('click', e => {
   const btn = e.target.closest('button');
@@ -3011,6 +3140,8 @@ function renderEjecutivo(){
       <td class="num">${b.compTrab ? `<span class="dm-pill dm-${eficLvl}">${efic.toFixed(1).replace('.',',')}%</span>` : '—'}</td>
     </tr>`;
   });
+
+  renderEjecutivoAsesores(facturadas);
 }
 
 
