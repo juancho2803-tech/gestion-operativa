@@ -337,9 +337,9 @@ tbody tr:hover{background:var(--surface-alt);}
   </nav>
 
   <label class="upload-zone" id="uploadZone">
-    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv">
+    <input type="file" id="fileInput" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0-12l-4 4m4-4l4 4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-    <span id="uploadLabel">Cargar base (.xlsx / .csv)</span>
+    <span id="uploadLabel">Cargar base (Excel)</span>
   </label>
   <span class="meta-updated" id="lastUpdated">Sin datos cargados</span>
   <span class="sync-badge" id="syncBadge">
@@ -502,7 +502,7 @@ tbody tr:hover{background:var(--surface-alt);}
       <div class="empty-state" id="emptyState">
         <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v12m0-12l-4 4m4-4l4 4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
         <h3>Todavía no hay datos</h3>
-        <p>Subí la base diaria (.xlsx o .csv) desde el botón de arriba para ver el estado del taller.</p>
+        <p>Subí la base diaria en Excel (.xlsx) desde el botón de arriba para ver el estado del taller.</p>
       </div>
     </div>
   </div>
@@ -1155,17 +1155,30 @@ fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.t
 ['dragleave','drop'].forEach(ev => uploadZone.addEventListener(ev, e=>{e.preventDefault(); uploadZone.classList.remove('drag');}));
 uploadZone.addEventListener('drop', e=>{ if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
 
+/* Solo se acepta Excel. Con CSV las fechas dd/mm/aaaa se leen como mm/dd (día y mes invertidos
+   cuando el día es ≤ 12) y las columnas con acentos pueden no reconocerse según la codificación.
+   El Excel guarda fechas y horas con su tipo real, así que se leen exactas. */
+const MSG_SOLO_EXCEL = 'Solo se aceptan archivos Excel (.xlsx o .xls).\n\nEl CSV no se admite porque invierte día y mes en las fechas y puede perder columnas con acentos. Exportá la base en Excel y volvé a cargarla.';
+function esArchivoExcel(bytes){
+  const zip = bytes[0]===0x50 && bytes[1]===0x4B && bytes[2]===0x03 && bytes[3]===0x04;               // .xlsx (ZIP)
+  const ole = bytes[0]===0xD0 && bytes[1]===0xCF && bytes[2]===0x11 && bytes[3]===0xE0;               // .xls (Excel 97-2003)
+  return zip || ole;
+}
 function handleFile(file){
+  // Primer filtro por extensión: evita leer en memoria un CSV de cientos de MB para nada.
+  if(!/\.(xlsx|xls)$/i.test(file.name || '')){ fileInput.value = ''; alert(MSG_SOLO_EXCEL); return; }
   uploadLabel.textContent = 'Procesando...';
   const reader = new FileReader();
   reader.onload = (e) => {
     try{
       const data = new Uint8Array(e.target.result);
+      // Segundo filtro por contenido: un CSV renombrado a .xlsx también se rechaza.
+      if(!esArchivoExcel(data)){ fileInput.value = ''; uploadLabel.textContent = 'Cargar base (Excel)'; alert(MSG_SOLO_EXCEL); return; }
       const wb = XLSX.read(data, {type:'array', cellDates:true});
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(ws, {defval:'', raw:true});
       ingestRows(rows);
-      uploadLabel.textContent = 'Cargar base (.xlsx / .csv)';
+      uploadLabel.textContent = 'Cargar base (Excel)';
       const now = new Date();
       lastUpdated.textContent = 'Actualizado ' + now.toLocaleDateString('es-AR') + ' ' + now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
       let cacheOk = true;
@@ -1175,7 +1188,7 @@ function handleFile(file){
       syncToGAS(RAW, lastUpdated.textContent);
     }catch(err){
       console.error(err);
-      uploadLabel.textContent = 'Cargar base (.xlsx / .csv)';
+      uploadLabel.textContent = 'Cargar base (Excel)';
       alert('No se pudo leer el archivo. Verificá que sea el export de órdenes de taller.');
     }
   };
