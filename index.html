@@ -43,6 +43,9 @@
   --mod-accesorios: #C9760A;
   --mod-garantia: var(--ok);
   --mod-ejecutivo: #C2298A;
+  --mod-gerencia: #5E8C1F;
+  /* Tipo de vehículo (paleta categórica validada, 4 primeros slots) */
+  --veh-auto:#2a78d6; --veh-suv:#eb6834; --veh-pickup:#1baf7a; --veh-util:#eda100;
   --grid-line: rgba(18,21,31,.035);
 }
 [data-theme="dark"]{
@@ -73,6 +76,8 @@
   --mod-trackeo: #7C9CFF;
   --mod-accesorios: #FFB454;
   --mod-ejecutivo: #FF6EC7;
+  --mod-gerencia: #A3D65C;
+  --veh-auto:#3987e5; --veh-suv:#d95926; --veh-pickup:#199e70; --veh-util:#c98500;
   --grid-line: rgba(255,255,255,.035);
 }
 *{box-sizing:border-box;}
@@ -277,6 +282,96 @@ tbody tr:hover{background:var(--surface-alt);}
 .pivot-table th.sortable:hover{color:var(--text);}
 .pivot-table th.sorted{color:var(--mod-ejecutivo);}
 .pivot-table td.sep-l{border-left:1px solid var(--border);}
+/* Gerencia */
+.ger-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:-6px 0 18px;}
+.ger-cobertura{font-size:12px;color:var(--text-dim);}
+.ger-cobertura b{color:var(--text);font-weight:600;}
+.ger-aviso{font-size:12px;line-height:1.45;color:var(--text);background:color-mix(in srgb, var(--warn) 12%, transparent);border:1px solid color-mix(in srgb, var(--warn) 40%, transparent);border-radius:10px;padding:9px 12px;margin-bottom:18px;}
+.ger-kpi .status-value small{font-size:13px;font-weight:600;margin-left:6px;}
+.ger-kpi .up{color:var(--ok);} .ger-kpi .down{color:var(--danger);} .ger-kpi .flat{color:var(--text-dim);}
+.ger-leyenda{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--text);margin:-4px 0 10px;}
+.ger-leyenda span{display:inline-flex;align-items:center;gap:6px;}
+.ger-leyenda i{width:10px;height:10px;border-radius:3px;display:inline-block;}
+.ger-nota{font-size:11.5px;color:var(--text-dim);margin-top:10px;line-height:1.45;}
+.ger-insight{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:12px;}
+.ger-insight b{font-weight:700;}
+.ger-split{display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;margin:6px 0 8px;}
+.ger-split i{display:block;height:100%;}
+.ger-mini{display:inline-flex;align-items:flex-end;gap:2px;height:22px;vertical-align:middle;}
+.ger-mini i{display:block;width:7px;border-radius:2px 2px 0 0;background:var(--mod-gerencia);}
+.ger-mini i.parcial{opacity:.4;}
+.ger-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ger-tile{background:var(--surface-alt);border:1px solid var(--border);border-radius:12px;padding:13px 15px;}
+.ger-tile .lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);}
+.ger-tile .val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--text);margin:4px 0 2px;}
+.ger-tile .sub{font-size:11.5px;color:var(--text-dim);line-height:1.4;}
+.ger-table td.mot{cursor:pointer;font-weight:600;}
+.ger-table td.mot:hover{text-decoration:underline;}
+.ger-table tr.activo td:first-child{box-shadow:inset 3px 0 0 var(--mod-gerencia);}
+.ger-pctbar{display:inline-block;width:70px;height:6px;border-radius:4px;background:var(--surface-alt);vertical-align:middle;margin-right:8px;overflow:hidden;}
+.ger-pctbar i{display:block;height:100%;background:var(--mod-gerencia);border-radius:4px;}
+details.ger-tabla summary{cursor:pointer;font-size:12px;color:var(--text-dim);margin-top:12px;}
+/* Externa vs Garantía */
+.seg-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;}
+@media(max-width:800px){.seg-cards{grid-template-columns:1fr;}}
+.seg-card{background:var(--surface-alt);border:1px solid var(--border);border-radius:12px;padding:15px 17px;cursor:pointer;text-align:left;font-family:inherit;color:var(--text);transition:.15s;}
+.seg-card:hover{border-color:var(--mod-ejecutivo);}
+.seg-card.activo{border-color:var(--mod-ejecutivo);box-shadow:inset 0 0 0 1px var(--mod-ejecutivo);}
+.seg-card .seg-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.seg-card .seg-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);}
+.seg-card .seg-efic{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;}
+.seg-card .seg-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.seg-card .seg-nums div{font-size:11px;color:var(--text-dim);}
+.seg-card .seg-nums b{display:block;font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--text);font-weight:600;}
+.seg-rank-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px;}
+.seg-rank-head h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);margin:0;}
+.seg-row{display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(160px,1.6fr) 74px repeat(3,minmax(70px,.5fr));gap:12px;align-items:center;padding:9px 8px;border-bottom:1px solid var(--border);border-radius:8px;cursor:pointer;}
+.seg-row:hover{background:var(--surface-alt);}
+.seg-row.activo{box-shadow:inset 3px 0 0 var(--mod-ejecutivo);background:var(--surface-alt);}
+.seg-row.head{cursor:default;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);padding-top:4px;padding-bottom:6px;}
+.seg-row.head:hover{background:none;}
+.seg-row .n{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text);}
+.seg-row .nm{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.seg-row .nm small{display:block;font-weight:400;font-size:11px;color:var(--text-dim);}
+.efic-track{position:relative;height:10px;border-radius:5px;background:var(--surface-alt);border:1px solid var(--border);}
+.efic-track i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;}
+.efic-track i.ok{background:var(--ok);} .efic-track i.warn{background:var(--warn);} .efic-track i.bad{background:var(--danger);}
+.efic-track .meta{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--text);opacity:.55;}
+@media(max-width:760px){.seg-row{grid-template-columns:minmax(0,1fr) 70px;}.seg-row > :nth-child(2),.seg-row > :nth-child(n+4){display:none;}}
+/* Casos más significativos */
+.casos-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:900px){.casos-stats{grid-template-columns:1fr;}}
+.caso-stat{background:var(--surface-alt);border:1px solid var(--border);border-radius:12px;padding:13px 15px;}
+.caso-stat b{display:block;font-family:'JetBrains Mono',monospace;font-size:21px;color:var(--text);margin-bottom:3px;}
+.caso-stat span{font-size:12px;color:var(--text-dim);line-height:1.4;}
+.casos-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:26px;}
+@media(max-width:1000px){.casos-grid{grid-template-columns:1fr;}}
+.casos-grid h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);margin:0 0 8px;}
+.caso-row{display:grid;grid-template-columns:28px minmax(0,1fr) 92px;gap:10px;align-items:center;padding:9px 8px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:8px;}
+.caso-row:hover{background:var(--surface-alt);}
+.caso-rank{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);text-align:right;}
+.caso-l1{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.caso-l1 strong{font-weight:700;margin-right:6px;}
+.caso-l2{font-size:11.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+.caso-bar{height:6px;border-radius:4px;background:var(--surface-alt);margin-top:6px;overflow:hidden;}
+.caso-bar i{display:block;height:100%;border-radius:4px;background:var(--mod-ejecutivo);}
+.caso-val{text-align:right;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:var(--text);}
+.caso-val small{display:block;font-weight:500;font-size:10.5px;color:var(--text-dim);}
+.conc-row{display:grid;grid-template-columns:minmax(0,1fr) 58px;gap:8px;align-items:center;padding:6px 6px;border-radius:8px;cursor:pointer;}
+.conc-row:hover{background:var(--surface-alt);}
+.conc-row.activo{box-shadow:inset 3px 0 0 var(--mod-ejecutivo);background:var(--surface-alt);}
+.conc-name{font-size:12.5px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.conc-pct{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);}
+.conc-block + .conc-block{margin-top:20px;}
+details.det-panel{margin-top:26px;}
+details.det-panel > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-weight:700;font-size:14px;color:var(--text);}
+details.det-panel > summary::-webkit-details-marker{display:none;}
+details.det-panel > summary .chev{transition:transform .15s;color:var(--text-dim);}
+details.det-panel[open] > summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none;}
+details.det-panel[open] > summary .chev{transform:rotate(90deg);}
+details.det-panel[open] > .table-panel{border-top-left-radius:0;border-top-right-radius:0;}
+details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--text-dim);}
+.pivot-table .sub2{display:block;font-size:11px;color:var(--text-dim);margin-top:2px;}
 .pivot-table td.efic-ok{background:color-mix(in srgb, var(--ok) 16%, transparent);}
 .pivot-table td.efic-warn{background:color-mix(in srgb, var(--warn) 18%, transparent);}
 .pivot-table td.efic-bad{background:color-mix(in srgb, var(--danger) 18%, transparent);}
@@ -330,6 +425,10 @@ tbody tr:hover{background:var(--surface-alt);}
     <button class="view-nav-btn" data-view="ejecutivo" style="--nav-c:var(--mod-ejecutivo)">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
       <span>Ejecutivo</span>
+    </button>
+    <button class="view-nav-btn" data-view="gerencia" style="--nav-c:var(--mod-gerencia)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+      <span>Gerencia</span>
     </button>
     <button class="view-nav-btn active" data-view="resumen" style="--nav-c:var(--mod-resumen)">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 1 9 9"/><path d="M12 7v5l3 2"/></svg>
@@ -390,6 +489,92 @@ tbody tr:hover{background:var(--surface-alt);}
 
 <div class="container">
 
+  <div id="view-gerencia" class="view hidden">
+    <div class="section-intro">
+      <h2><span class="section-icon" style="--sic:var(--mod-gerencia);--sic-soft:color-mix(in srgb, var(--mod-gerencia) 16%, transparent)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span>Gerencia — ingresos, motivos y proyección</h2>
+      <p>Cuántos vehículos entran al taller, de qué tipo y por qué motivo, cómo evolucionó en los últimos meses y hacia dónde va. Se cuentan <strong>vehículos</strong> (un mismo chasis el mismo día es un solo ingreso aunque tenga varias órdenes) según la <strong>fecha de apertura</strong>; las anuladas no cuentan.</p>
+    </div>
+
+    <div class="filters" id="filtersBar-gerencia">
+      <span class="filter-clear" id="clearFilters-gerencia">Limpiar filtros</span>
+      <span class="filter-count" id="filterCount-gerencia"></span>
+    </div>
+
+    <div class="ger-toolbar">
+      <div class="pill-selector" id="gerUniversoSelector" title="Qué ingresos se cuentan">
+        <button type="button" data-u="clientes" class="active">Clientes</button>
+        <button type="button" data-u="todo">Todo el taller (incluye internas y preentrega)</button>
+      </div>
+      <span class="ger-cobertura" id="gerCobertura"></span>
+    </div>
+    <div class="ger-aviso hidden" id="gerAviso"></div>
+
+    <div class="status-row cols-4 ger-kpi" id="gerKpis"></div>
+
+    <div class="panel" style="margin-bottom:26px;">
+      <div class="panel-head" style="flex-wrap:wrap;gap:12px;">
+        <h3 id="gerIngresosTitulo">Ingresos de vehículos</h3>
+        <div class="pill-selector" id="gerPeriodoSelector">
+          <button type="button" data-p="dia">Diario</button>
+          <button type="button" data-p="semana">Semanal</button>
+          <button type="button" data-p="mes" class="active">Mensual</button>
+        </div>
+      </div>
+      <div class="ger-leyenda" id="gerLeyenda"></div>
+      <div class="chart-wrap" style="height:330px;"><canvas id="chartGerIngresos"></canvas></div>
+      <div class="ger-nota" id="gerIngresosNota"></div>
+      <details class="ger-tabla"><summary>Ver los números en tabla</summary>
+        <div class="table-scroll" style="max-height:340px;margin-top:8px;"><table class="pivot-table" id="gerIngresosTabla"></table></div>
+      </details>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head"><h3>Ingresos promedio por día de la semana</h3></div>
+        <div class="ger-insight" id="gerDowInsight"></div>
+        <div class="chart-wrap" style="height:230px;"><canvas id="chartGerDow"></canvas></div>
+        <div class="ger-nota" id="gerDowNota"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Autos y camionetas · modelos más atendidos</h3></div>
+        <div id="gerTipos"></div>
+        <div id="gerModelos" style="margin-top:12px;"></div>
+      </div>
+    </div>
+
+    <div class="table-panel" style="margin-bottom:26px;">
+      <div class="table-head">
+        <h3>Motivos de visita</h3>
+        <span class="table-count" id="gerMotivosCount"></span>
+      </div>
+      <div class="table-scroll" style="max-height:none;">
+        <table class="pivot-table ger-table" id="gerMotivosTabla"></table>
+      </div>
+      <div class="ger-nota" style="padding:0 20px 16px;" id="gerMotivosNota"></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head"><h3>Services por kilometraje</h3></div>
+        <div class="ger-insight" id="gerKmInsight"></div>
+        <div class="chart-wrap" style="height:230px;"><canvas id="chartGerKm"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Indicadores de servicio</h3></div>
+        <div class="ger-tiles" id="gerTiles"></div>
+        <div class="ger-nota" id="gerTilesNota"></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:26px;">
+      <div class="panel-head"><h3>Proyección</h3></div>
+      <div class="ger-insight" id="gerProyInsight"></div>
+      <div class="chart-wrap" style="height:300px;" id="gerProyChartWrap"><canvas id="chartGerProy"></canvas></div>
+      <div class="table-scroll" style="max-height:none;margin-top:14px;"><table class="pivot-table" id="gerProyTabla"></table></div>
+      <div class="ger-nota" id="gerProyNota"></div>
+    </div>
+  </div><!-- /view-gerencia -->
+
   <div id="view-ejecutivo" class="view hidden">
     <div class="section-intro">
       <h2><span class="section-icon" style="--sic:var(--mod-ejecutivo);--sic-soft:color-mix(in srgb, var(--mod-ejecutivo) 16%, transparent)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>Panorama Ejecutivo</h2>
@@ -403,6 +588,22 @@ tbody tr:hover{background:var(--surface-alt);}
 
     <div class="hero-row" id="ejecutivoCardsTop"></div>
     <div class="status-row cols-4" id="ejecutivoCardsHoras"></div>
+
+    <div class="panel" style="margin-bottom:26px;">
+      <div class="panel-head">
+        <h3>Externa vs. Garantía — ¿quién factura menos de lo que trabaja?</h3>
+      </div>
+      <div class="seg-cards" id="segCards"></div>
+      <div class="seg-rank-head">
+        <h4 id="segRankTitulo"></h4>
+        <div class="pill-selector" id="segOrdenSelector">
+          <button type="button" data-orden="efic" class="active">Menor eficiencia</button>
+          <button type="button" data-orden="perdida">Más horas no facturadas</button>
+        </div>
+      </div>
+      <div id="segRank"></div>
+      <div style="font-size:11.5px;color:var(--text-dim);margin-top:10px;" id="segNota"></div>
+    </div>
 
     <div class="panel" style="margin-bottom:26px;">
       <div class="panel-head">
@@ -467,6 +668,61 @@ tbody tr:hover{background:var(--surface-alt);}
         </div>
       </div>
     </div>
+
+    <div class="panel" style="margin-top:26px;">
+      <div class="panel-head" style="flex-wrap:wrap;gap:12px;">
+        <h3>Casos más significativos</h3>
+        <div class="pill-selector" id="casosSelector">
+          <button type="button" data-modo="perdida" class="active">Horas no facturadas</button>
+          <button type="button" data-modo="sinmarc">Facturadas sin marcación</button>
+        </div>
+      </div>
+      <div class="casos-stats" id="casosStats"></div>
+      <div class="casos-grid" id="casosGrid">
+        <div>
+          <h4 id="casosListaTitulo"></h4>
+          <div id="casosLista"></div>
+        </div>
+        <div>
+          <div class="conc-block"><h4>Por subtipología</h4><div id="casosPorSubtipo"></div></div>
+          <div class="conc-block"><h4>Por asesor</h4><div id="casosPorAsesor"></div></div>
+        </div>
+      </div>
+      <div class="empty-state hidden" id="casosEmpty" style="padding:50px 20px;">
+        <h3>Sin casos para mostrar</h3>
+        <p>No hay órdenes facturadas que cumplan este criterio con los filtros actuales.</p>
+      </div>
+    </div>
+
+    <details class="det-panel" id="ordenEjDetails">
+      <summary><svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>Ver todas las órdenes facturadas <span class="dim">(búsqueda y detalle completo)</span></summary>
+    <div class="table-panel">
+      <div class="table-head">
+        <h3>Detalle orden por orden (solo Facturadas)</h3>
+        <div class="search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="ordenEjSearchBox" placeholder="Buscar por Nº de orden, patente o cliente...">
+        </div>
+        <div class="pill-selector" id="ordenEjSelector">
+          <button type="button" data-sel="todas" class="active">Todas</button>
+          <button type="button" data-sel="debajo">Debajo del objetivo</button>
+          <button type="button" data-sel="sinmarc">Sin marcación</button>
+        </div>
+        <span class="table-count" id="ordenEjCount"></span>
+      </div>
+      <div class="table-scroll" style="max-height:600px;">
+        <table id="ordenEjTable" class="pivot-table">
+          <thead id="ordenEjHead"></thead>
+          <tbody id="ordenEjBody"></tbody>
+        </table>
+        <div class="empty-state hidden" id="ordenEjEmpty">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v12m0-12l-4 4m4-4l4 4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          <h3>Sin órdenes para mostrar</h3>
+          <p>Ajustá la búsqueda, el selector o los filtros de arriba.</p>
+        </div>
+      </div>
+    </div>
+    </details>
   </div><!-- /view-ejecutivo -->
 
   <div id="view-resumen" class="view">
@@ -1268,7 +1524,8 @@ const GAS_FIELDS = [
   'fPedidoFabrica','fPreCarga','fConfirmRepuestos',
   'horaApertura','fMarcacion1','horaMarcacion1','fUltimaMarcacion','horaUltimaMarcacion',
   'fCierreJT','horaCierreJT','fFacturacion','fVale',
-  'fTurno','horaTurno','horaPreRecepcion','horaRecepcion','horaFacturadas'
+  'fTurno','horaTurno','horaPreRecepcion','horaRecepcion','horaFacturadas',
+  'modelo','km','chasis','diasTaller','tareas'
 ];
 const settingsMenu = document.getElementById('settingsMenu');
 const settingsToggle = document.getElementById('settingsToggle');
@@ -1319,7 +1576,7 @@ document.getElementById('gasUrlClear').addEventListener('click', () => {
 });
 
 /** Envía la base completa al backend (reemplaza toda la hoja). No bloquea la UI si falla. */
-const GAS_API_VERSION = 2; // debe coincidir con API_VERSION en gas/Code.gs
+const GAS_API_VERSION = 3; // debe coincidir con API_VERSION en gas/Code.gs
 
 /** Llamada JSONP genérica al Apps Script (el GET sí se puede leer vía JSONP). */
 function gasJsonp(params, timeoutMs = 90000){
@@ -1471,6 +1728,13 @@ function ingestRows(rows){
       fFacturacion: excelDateToISO(r['Fecha facturacion']),
       fVale: excelDateToISO(r['Fecha de vale']),
       horaFacturadas: toNumber(r['Hora Facturadas']),
+      // Para la sección Gerencia: tipo de vehículo, kilometraje, recurrencia, estadía y motivo de visita
+      modelo: (r['Modelo']||'').toString().trim().replace(/\s+/g,' ').toUpperCase(),
+      km: toNumber(r['kilometraje']),
+      chasis: (r['Chasis']||'').toString().trim().toUpperCase(),
+      diasTaller: toNumber(r['Dias en taller']),
+      tareas: [1,2,3,4,5,6,7,8,9].map(i => (r['Tarea '+i]||'').toString().trim().replace(/\s+/g,' ').toUpperCase())
+                .filter(Boolean).join(' | ').slice(0, 300),
       fTurno: excelDateToISO(r['Fecha turno']),
       horaTurno: excelTimeToHHMM(r['Hora turno']),
       horaPreRecepcion: excelTimeToHHMM(r['Hora pre recepción']),
@@ -1490,20 +1754,22 @@ const FILTER_CONFIGS = [
   { key:'estado', label:'Estado', get:r=>r.estado },
   { key:'tipologia', label:'Tipología', get:r=>r.tipologia },
   { key:'subtipologia', label:'Subtipología', get:r=>r.subtipologia },
-  { key:'pedido', label:'Pedido fábrica', get:r=>r.pedido, staticValues:['si','no'], fmt:v=>v==='si'?'Con pedido':'Sin pedido' },
-  { key:'confirmacion', label:'Confirmación entrega', get:r=> r.fConfirm ? 'si':'no', staticValues:['si','no'], fmt:v=>v==='si'?'Confirmada':'Sin confirmar' },
+  { key:'pedido', label:'Pedido fábrica', exceptNs:['gerencia'], get:r=>r.pedido, staticValues:['si','no'], fmt:v=>v==='si'?'Con pedido':'Sin pedido' },
+  { key:'confirmacion', label:'Confirmación entrega', exceptNs:['gerencia'], get:r=> r.fConfirm ? 'si':'no', staticValues:['si','no'], fmt:v=>v==='si'?'Confirmada':'Sin confirmar' },
   { key:'mes', label:'Mes apertura', get:r=>r.mesApertura, fmt:m=> m ? `${MESES[parseInt(m.slice(5,7))-1]} ${m.slice(0,4)}` : m },
   // Mes de la fecha de facturación real. Solo en los módulos que incluyen órdenes facturadas.
   { key:'mesFact', label:'Mes facturación', onlyNs:['ejecutivo','resumen','trackeo','accesorios'],
     get:r=> (r.fFacturacion && fechaRazonable(r.fFacturacion)) ? r.fFacturacion.slice(0,7) : (r.estado==='Facturada' ? '(Facturada sin fecha)' : '(Sin facturar)'),
     fmt:m=> /^\d{4}-\d{2}$/.test(m) ? `${MESES[parseInt(m.slice(5,7))-1]} ${m.slice(0,4)}` : m },
-  { key:'estadoPedido', label:'Estado pedido', get:r=>r.estadoPedido || '(Sin estado)' },
+  { key:'estadoPedido', label:'Estado pedido', exceptNs:['gerencia'], get:r=>r.estadoPedido || '(Sin estado)' },
+  { key:'tipoVeh', label:'Tipo de vehículo', onlyNs:['gerencia'], get:r=>gerInfo(r).tipo },
+  { key:'motivo', label:'Motivo de visita', onlyNs:['gerencia'], get:r=>gerInfo(r).motivo },
 ];
 
-const NS_LIST = ['resumen','siniestros','pedidos','trackeo','accesorios','garantia','ejecutivo'];
+const NS_LIST = ['resumen','siniestros','pedidos','trackeo','accesorios','garantia','ejecutivo','gerencia'];
 function newFilterSet(){ const s={}; FILTER_CONFIGS.forEach(c => s[c.key] = new Set()); return s; }
-const filterState = { resumen: newFilterSet(), siniestros: newFilterSet(), pedidos: newFilterSet(), trackeo: newFilterSet(), accesorios: newFilterSet(), garantia: newFilterSet(), ejecutivo: newFilterSet() };
-const cfgValues = { resumen: {}, siniestros: {}, pedidos: {}, trackeo: {}, accesorios: {}, garantia: {}, ejecutivo: {} };
+const filterState = { resumen: newFilterSet(), siniestros: newFilterSet(), pedidos: newFilterSet(), trackeo: newFilterSet(), accesorios: newFilterSet(), garantia: newFilterSet(), ejecutivo: newFilterSet(), gerencia: newFilterSet() };
+const cfgValues = { resumen: {}, siniestros: {}, pedidos: {}, trackeo: {}, accesorios: {}, garantia: {}, ejecutivo: {}, gerencia: {} };
 
 let activeStatusCardResumen = null;
 let activeStatusCardSiniestros = null;
@@ -1511,6 +1777,7 @@ let activeStatusCardPedidos = null;
 let activeStatusCardTrackeo = null; // sin cards de estado en Trackeo, queda siempre null
 let activeStatusCardAccesorios = null;
 let activeStatusCardGarantia = null;
+let activeStatusCardGerencia = null, activeInsightGerencia = null; // Gerencia no usa cards de estado
 let activeStatusCardEjecutivo = null; // sin cards de estado en Ejecutivo, queda siempre null
 let activeInsight = null; // Resumen (INSIGHTS)
 let activeInsightTrackeo = null; // sin indicadores en Trackeo, queda siempre null
@@ -1523,6 +1790,7 @@ function baseRowsFor(ns){
   if(ns === 'pedidos') return RAW.filter(r => r.pedido === 'si' && r.estado === 'Abierta');
   if(ns === 'accesorios') return RAW.filter(isAccesorio);
   if(ns === 'garantia') return RAW.filter(r => isGarantia(r) && r.estado === 'Abierta');
+  if(ns === 'gerencia') return gerBaseRows();
   return RAW; // resumen, trackeo y ejecutivo trabajan sobre toda la base
 }
 
@@ -1531,6 +1799,7 @@ function buildFilterOptions(){
     const base = baseRowsFor(ns);
     FILTER_CONFIGS.forEach(cfg => {
       if(cfg.onlyNs && !cfg.onlyNs.includes(ns)) return; // filtro que no aplica a este módulo
+      if(cfg.exceptNs && cfg.exceptNs.includes(ns)) return;
       const values = cfg.staticValues ? cfg.staticValues : [...new Set(base.map(cfg.get))].filter(v=>v!==null && v!==undefined && v!=='').sort();
       cfgValues[ns][cfg.key] = values;
       renderMultiSelect(ns, cfg);
@@ -1637,6 +1906,7 @@ function clearFiltersFor(ns){
   else if(ns === 'accesorios'){ activeStatusCardAccesorios = null; activeAccesorioInsight = null; }
   else if(ns === 'garantia'){ activeStatusCardGarantia = null; activeGarantiaInsight = null; valeSelectorGarantia = 'todos'; activeValeNivel = null; syncValeSelectorUI(); }
   else if(ns === 'ejecutivo'){ activeStatusCardEjecutivo = null; activeInsightEjecutivo = null; }
+  else if(ns === 'gerencia'){ /* sin estado propio */ }
   else { activeStatusCardTrackeo = null; activeInsightTrackeo = null; }
   applyFilters(ns);
 }
@@ -1647,6 +1917,7 @@ document.getElementById('clearFilters-trackeo').addEventListener('click', () => 
 document.getElementById('clearFilters-accesorios').addEventListener('click', () => clearFiltersFor('accesorios'));
 document.getElementById('clearFilters-garantia').addEventListener('click', () => clearFiltersFor('garantia'));
 document.getElementById('clearFilters-ejecutivo').addEventListener('click', () => clearFiltersFor('ejecutivo'));
+document.getElementById('clearFilters-gerencia').addEventListener('click', () => clearFiltersFor('gerencia'));
 document.getElementById('searchBox').addEventListener('input', debounce(renderTable));
 
 function nsStatusVar(ns){
@@ -1656,6 +1927,7 @@ function nsStatusVar(ns){
   if(ns==='accesorios') return {get:()=>activeStatusCardAccesorios, set:v=>activeStatusCardAccesorios=v};
   if(ns==='garantia') return {get:()=>activeStatusCardGarantia, set:v=>activeStatusCardGarantia=v};
   if(ns==='ejecutivo') return {get:()=>activeStatusCardEjecutivo, set:v=>activeStatusCardEjecutivo=v};
+  if(ns==='gerencia') return {get:()=>activeStatusCardGerencia, set:v=>activeStatusCardGerencia=v};
   return {get:()=>activeStatusCardPedidos, set:v=>activeStatusCardPedidos=v};
 }
 function nsInsightList(ns){
@@ -1664,7 +1936,7 @@ function nsInsightList(ns){
   if(ns==='trackeo') return [];
   if(ns==='accesorios') return ACCESORIO_INSIGHTS;
   if(ns==='garantia') return GARANTIA_INSIGHTS;
-  if(ns==='ejecutivo') return [];
+  if(ns==='ejecutivo' || ns==='gerencia') return [];
   return PEDIDO_INSIGHTS;
 }
 function nsInsightVar(ns){
@@ -1674,6 +1946,7 @@ function nsInsightVar(ns){
   if(ns==='accesorios') return {get:()=>activeAccesorioInsight, set:v=>activeAccesorioInsight=v};
   if(ns==='garantia') return {get:()=>activeGarantiaInsight, set:v=>activeGarantiaInsight=v};
   if(ns==='ejecutivo') return {get:()=>activeInsightEjecutivo, set:v=>activeInsightEjecutivo=v};
+  if(ns==='gerencia') return {get:()=>activeInsightGerencia, set:v=>activeInsightGerencia=v};
   return {get:()=>activePedidoInsight, set:v=>activePedidoInsight=v};
 }
 
@@ -1733,9 +2006,10 @@ function renderCurrentView(){
   else if(currentView === 'trackeo'){ renderTrackeo(); }
   else if(currentView === 'accesorios'){ renderAccesorios(); }
   else if(currentView === 'garantia'){ renderGarantia(); }
+  else if(currentView === 'gerencia'){ renderGerencia(); }
   else { renderEjecutivo(); }
 }
-const VIEW_TITLES = { resumen:'Resumen general', siniestros:'Siniestros — Chapa y Pintura', pedidos:'Pedidos a fábrica', trackeo:'Trackeo', accesorios:'Accesorios', garantia:'Garantía', ejecutivo:'Panorama Ejecutivo' };
+const VIEW_TITLES = { resumen:'Resumen general', siniestros:'Siniestros — Chapa y Pintura', pedidos:'Pedidos a fábrica', trackeo:'Trackeo', accesorios:'Accesorios', garantia:'Garantía', ejecutivo:'Panorama Ejecutivo', gerencia:'Gerencia' };
 document.getElementById('viewNav').addEventListener('click', e => {
   const btn = e.target.closest('.view-nav-btn');
   if(!btn) return;
@@ -1748,6 +2022,7 @@ document.getElementById('viewNav').addEventListener('click', e => {
   document.getElementById('view-accesorios').classList.toggle('hidden', currentView!=='accesorios');
   document.getElementById('view-garantia').classList.toggle('hidden', currentView!=='garantia');
   document.getElementById('view-ejecutivo').classList.toggle('hidden', currentView!=='ejecutivo');
+  document.getElementById('view-gerencia').classList.toggle('hidden', currentView!=='gerencia');
   document.querySelector('.brand-text span').textContent = VIEW_TITLES[currentView];
   renderCurrentView();
 });
@@ -3079,6 +3354,708 @@ function renderEjecutivoAsesores(facturadas){
   </tr>`;
 }
 
+/* ============ GERENCIA: INGRESOS, MOTIVOS Y PROYECCIÓN ============ */
+// Familia y tipo de vehículo a partir del texto libre de "Modelo" (viene como "AMAROK..", "T - CROSS", "NUEVA AMAROK DC 3.0L TDI"…).
+// El orden importa: la primera regla que coincide gana.
+const VEH_TIPOS = ['Auto','SUV','Pick-up','Utilitario / otro'];
+const VEH_COLOR = { 'Auto':'--veh-auto', 'SUV':'--veh-suv', 'Pick-up':'--veh-pickup', 'Utilitario / otro':'--veh-util' };
+const FAMILIAS = [
+  [/AMAROK/, 'Amarok', 'Pick-up'], [/SAVEIRO/, 'Saveiro', 'Pick-up'],
+  [/TRANSPORTER|MULTIVAN|CRAFTER|CADDY|DELIVERY|CONSTELLATION|WORKER|SHARAN/, 'Utilitario', 'Utilitario / otro'],
+  [/TAOS/, 'Taos', 'SUV'], [/NIVUS/, 'Nivus', 'SUV'], [/ TERA /, 'Tera', 'SUV'], [/ T ?CROSS /, 'T-Cross', 'SUV'],
+  [/TIGUAN/, 'Tiguan', 'SUV'], [/TOUAREG/, 'Touareg', 'SUV'], [/ ID ?4 /, 'ID.4', 'SUV'],
+  [/POLO TRACK/, 'Polo Track', 'Auto'], [/POLO/, 'Polo', 'Auto'], [/VIRTUS/, 'Virtus', 'Auto'], [/ UP /, 'Up!', 'Auto'],
+  [/VENTO|JETTA/, 'Vento / Jetta', 'Auto'], [/GOLF/, 'Golf', 'Auto'], [/ GOL /, 'Gol', 'Auto'], [/ FOX |CROSSFOX/, 'Fox', 'Auto'],
+  [/SURAN/, 'Suran', 'Auto'], [/VOYAGE/, 'Voyage', 'Auto'], [/PASSAT/, 'Passat', 'Auto'], [/BORA/, 'Bora', 'Auto'],
+  [/SCIROCCO/, 'Scirocco', 'Auto'], [/BEETLE|FUSCA|ESCARABAJO/, 'Beetle', 'Auto'],
+];
+const MOTIVOS = ['Service programado','Garantía (reparación)','Reparación / diagnóstico','Alineado, balanceo y neumáticos','Chapa y pintura','Accesorios','Preentrega 0 km','Interna / usados'];
+
+/** Motivo de visita de una orden. Prioridad: preentrega > chapa > accesorios > service > garantía > alineado > interna > reparación.
+    El service va antes que garantía porque la mayoría de los services del período de garantía vienen con tipología GARANTÍA. */
+function motivoVisita(r){
+  const sub = (r.subtipologia||'').toUpperCase(), tip = (r.tipologia||'').toUpperCase();
+  const t1 = (r.tarea1||'').toUpperCase(), ts = ((r.tareas||'') || t1).toUpperCase();
+  if(r.preentrega === 'si' || /PRE-?ENTREGA/.test(sub) || /GESTI[OÓ]N DE COMPONENTES/.test(t1)) return 'Preentrega 0 km';
+  if(sub.includes('CHAPA')) return 'Chapa y pintura';
+  if(sub.includes('ACCESORIO')) return 'Accesorios';
+  if(/^SERVICIO\b.*KM/.test(t1) || /SERVICIO (DE )?\d|SERVICIO DE MANTENIMIENTO/.test(ts)) return 'Service programado';
+  if(tip === 'GARANTÍA' || tip === 'GARANTIA') return 'Garantía (reparación)';
+  if(/ALINE|BALANCE|NEUM[AÁ]TIC|CUBIERTA/.test(ts)) return 'Alineado, balanceo y neumáticos';
+  if(tip === 'INTERNA') return 'Interna / usados';
+  return 'Reparación / diagnóstico';
+}
+/** Kilometraje del service (15.000, 30.000…) leído de la tarea; null si no es un service con km. */
+function kmService(r){
+  const m = ((r.tarea1||'') + ' | ' + (r.tareas||'')).toUpperCase().match(/SERVICIO (?:DE )?(\d{1,3}(?:[.,]?\d{3})+|\d+)\s*KM/);
+  if(!m) return null;
+  const n = parseInt(m[1].replace(/[.,]/g,''), 10);
+  return n >= 1000 && n <= 400000 ? n : null;
+}
+const _gerCache = new WeakMap(); // datos derivados por fila (no se guardan en la base ni en Sheets)
+function gerInfo(r){
+  let c = _gerCache.get(r);
+  if(c) return c;
+  const m = ' ' + (r.modelo||'').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim() + ' ';
+  let familia = r.modelo ? 'Otros' : '(Sin modelo)', tipo = 'Utilitario / otro';
+  for(const [re, f, t] of FAMILIAS){ if(re.test(m)){ familia = f; tipo = t; break; } }
+  c = { familia, tipo, motivo: motivoVisita(r), visitaKey: (r.chasis || ('OT' + r.orden)) + '|' + r.fApertura };
+  _gerCache.set(r, c);
+  return c;
+}
+
+let gerUniverso = 'clientes';   // clientes (sin internas ni preentrega) | todo
+let gerPeriodo = 'mes';         // dia | semana | mes
+let chartGerIngresos = null, chartGerDow = null, chartGerKm = null, chartGerProy = null;
+function esClienteGer(r){ const m = gerInfo(r).motivo; return (r.tipologia||'').toUpperCase() !== 'INTERNA' && m !== 'Preentrega 0 km' && m !== 'Interna / usados'; }
+function gerBaseRows(){
+  return RAW.filter(r => !/ANULADA/i.test(r.estado||'') && r.fApertura && fechaRazonable(r.fApertura) && (gerUniverso === 'todo' || esClienteGer(r)));
+}
+
+// Fechas (ISO local, sin husos horarios)
+const gD = iso => { const [y,m,d] = iso.split('-').map(Number); return new Date(y, m-1, d); };
+const gISO = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+const gAdd = (iso, n) => { const d = gD(iso); d.setDate(d.getDate() + n); return gISO(d); };
+const gMesAdd = (mk, n) => gISO(new Date(+mk.slice(0,4), +mk.slice(5,7) - 1 + n, 1)).slice(0,7);
+const gDiasMes = mk => new Date(+mk.slice(0,4), +mk.slice(5,7), 0).getDate();
+const gMesCorto = mk => `${MESES[+mk.slice(5,7)-1]} ${mk.slice(2,4)}`;
+const gMesNombre = mk => ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][+mk.slice(5,7)-1];
+const gFecha = iso => `${iso.slice(8,10)}/${iso.slice(5,7)}/${iso.slice(0,4)}`;
+const DOW = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const DOW_LARGO = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const gNum = (n, dec=0) => Number(n).toLocaleString('es-AR', { minimumFractionDigits:dec, maximumFractionDigits:dec });
+const gMonto = r => (Number(r.moFacturada)||0) + (Number(r.moExterna)||0) + (Number(r.matFacturado)||0) + (Number(r.matExterno)||0);
+
+/** Un ingreso = un vehículo (chasis) en una fecha de apertura, aunque tenga varias órdenes. */
+function gerVisitas(rows){
+  const m = new Map();
+  rows.forEach(r => {
+    const g = gerInfo(r);
+    let v = m.get(g.visitaKey);
+    if(!v){ v = { fecha:r.fApertura, chasis:r.chasis || '', tipo:g.tipo, familia:g.familia, turno:false, km:0, n:0 }; m.set(g.visitaKey, v); }
+    v.n++; if(r.fTurno) v.turno = true; v.km = Math.max(v.km, Number(r.km)||0);
+  });
+  return [...m.values()];
+}
+
+/** Meses que la base trae incompletos (export parcial): el primero si arranca empezado y los que tienen
+    menos del 40% de los ingresos del mejor mes completo (un taller no cae así de un mes a otro; si pasa, es
+    que el Excel no trae todas las órdenes de ese mes). No se usan para proyectar y se marcan con *. */
+function gerMesesIncompletos(visitasBase, minISO, curMk){
+  const porMes = {};
+  visitasBase.forEach(v => { const k = v.fecha.slice(0,7); porMes[k] = (porMes[k]||0) + 1; });
+  const completos = Object.keys(porMes).filter(k => k !== curMk);
+  const mejor = Math.max(0, ...completos.map(k => porMes[k]));
+  const inc = new Set();
+  completos.forEach(k => { if(porMes[k] < 0.4 * mejor) inc.add(k); });
+  if(+minISO.slice(8,10) > 3) inc.add(minISO.slice(0,7));
+  return inc;
+}
+
+function gerChart(prev, el, cfg){ if(prev) prev.destroy(); return new Chart(el, cfg); }
+const gerEjes = () => ({
+  x: { grid:{display:false}, ticks:{color:cssVar('--text-dim'), font:{size:10.5,family:'Inter'}, maxRotation:0, autoSkip:true} },
+  y: { beginAtZero:true, grid:{color:cssVar('--border')}, ticks:{color:cssVar('--text-dim'), font:{size:11,family:'Inter'}, precision:0} }
+});
+
+function renderGerencia(){
+  const base = gerBaseRows();
+  const rows = computeFiltered('gerencia');
+  const ids = ['gerKpis','gerTipos','gerModelos','gerTiles'];
+  if(!base.length){
+    document.getElementById('gerCobertura').textContent = 'Cargá una base para ver esta sección.';
+    ids.forEach(id => document.getElementById(id).innerHTML = '');
+    return;
+  }
+  const refISO = base.reduce((mx,r) => r.fApertura > mx ? r.fApertura : mx, '');
+  const minISO = base.reduce((mn,r) => r.fApertura < mn ? r.fApertura : mn, refISO);
+  const curMk = refISO.slice(0,7), prevMk = gMesAdd(curMk, -1), dRef = +refISO.slice(8,10);
+  const inc = gerMesesIncompletos(gerVisitas(base), minISO, curMk);
+  const visitas = gerVisitas(rows);
+
+  // ---- cobertura y aviso
+  document.getElementById('gerCobertura').innerHTML = `Aperturas del <b>${gFecha(minISO)}</b> al <b>${gFecha(refISO)}</b> · los cálculos toman como "hoy" el <b>${gFecha(refISO)}</b>, último día con aperturas en la base`;
+  const ult6 = Array.from({length:6}, (_,i) => gMesAdd(curMk, -6+i));
+  const incVisibles = ult6.filter(k => inc.has(k) && k >= minISO.slice(0,7));
+  const sinDatos = ult6.filter(k => k < minISO.slice(0,7));
+  const aviso = document.getElementById('gerAviso');
+  const partes = [];
+  if(incVisibles.length) partes.push(`<b>${incVisibles.map(gMesCorto).join(', ')}</b> ${incVisibles.length>1?'tienen':'tiene'} muchas menos órdenes que el resto: probablemente el Excel no las trae completas. Se marcan con * y no se usan para proyectar.`);
+  if(sinDatos.length) partes.push(`La base no tiene aperturas de <b>${sinDatos.map(gMesCorto).join(', ')}</b>.`);
+  if(partes.length) partes.push('Para ver la evolución real de 6 meses, exportá del sistema todas las órdenes abiertas en ese período.');
+  aviso.innerHTML = partes.join(' ');
+  aviso.classList.toggle('hidden', !partes.length);
+
+  // ---- conteos base
+  const porFecha = {};
+  visitas.forEach(v => { porFecha[v.fecha] = (porFecha[v.fecha]||0) + 1; });
+  const enMes = (mk, hastaDia=31) => visitas.filter(v => v.fecha.slice(0,7) === mk && +v.fecha.slice(8,10) <= hastaDia).length;
+  const habiles = (mk, hasta) => { let n = 0; for(let d=1; d<=hasta; d++){ const w = new Date(+mk.slice(0,4), +mk.slice(5,7)-1, d).getDay(); if(w>=1 && w<=5) n++; } return n; };
+  const vCur = enMes(curMk), vPrevSame = enMes(prevMk, dRef), vPrevFull = enMes(prevMk);
+  const promCur = vCur / Math.max(1, habiles(curMk, dRef));
+  const promPrev = vPrevFull / Math.max(1, habiles(prevMk, gDiasMes(prevMk)));
+  // promedio por día de semana (últimas 8 semanas) → proyección del resto del mes
+  const dowProm = dias => { const s = Array(7).fill(0), n = Array(7).fill(0);
+    for(let i = dias-1; i >= 0; i--){ const iso = gAdd(refISO, -i); if(iso < minISO || inc.has(iso.slice(0,7))) continue; /* días de meses incompletos no cuentan */ const w = gD(iso).getDay(); n[w]++; s[w] += porFecha[iso]||0; }
+    return s.map((x,i) => n[i] ? x/n[i] : 0); };
+  const dow8 = dowProm(56);
+  let proyMes = vCur;
+  for(let d = dRef+1; d <= gDiasMes(curMk); d++) proyMes += dow8[new Date(+curMk.slice(0,4), +curMk.slice(5,7)-1, d).getDay()];
+  proyMes = Math.round(proyMes);
+  const factMes = mk => rows.filter(r => r.estado === 'Facturada' && r.fFacturacion && r.fFacturacion.slice(0,7) === mk && fechaRazonable(r.fFacturacion));
+  const fCur = factMes(curMk), fPrev = factMes(prevMk);
+  const ticket = arr => arr.length ? arr.reduce((s,r) => s + gMonto(r), 0) / arr.length : 0;
+  const tCur = ticket(fCur), tPrev = ticket(fPrev);
+
+  const delta = (a,b) => b ? (a/b - 1) * 100 : null;
+  const fmtDelta = d => d === null ? '' : `<small class="${d>0.5?'up':d<-0.5?'down':'flat'}">${d>0.5?'▲':d<-0.5?'▼':'='} ${gNum(Math.abs(d))}%</small>`;
+  const mesC = gMesNombre(curMk), mesP = gMesNombre(prevMk);
+  const kpis = [
+    { lbl:`Ingresos de ${mesC} (al ${gFecha(refISO).slice(0,5)})`, val:gNum(vCur), d:delta(vCur, vPrevSame), sub:`${gNum(vPrevSame)} en el mismo tramo de ${mesP}`, c:'--mod-gerencia' },
+    { lbl:'Promedio por día hábil (lun–vie)', val:gNum(promCur,1), d:delta(promCur, promPrev), sub:`${mesP} completo: ${gNum(promPrev,1)} por día`, c:'--accent2' },
+    { lbl:`Proyección de cierre de ${mesC}`, val:gNum(proyMes), d:delta(proyMes, vPrevFull), sub:`${mesP} cerró con ${gNum(vPrevFull)} · según el ritmo de cada día de la semana en las últimas 8 semanas`, c:'--violet' },
+    { lbl:'Ticket promedio por orden facturada', val:fCur.length ? fmtMoney(tCur) : '—', d:fCur.length && fPrev.length ? delta(tCur, tPrev) : null, sub:`${gNum(fCur.length)} órdenes facturadas en ${mesC} · ${mesP}: ${fPrev.length ? fmtMoney(tPrev) : '—'}`, c:'--accent' },
+  ];
+  document.getElementById('gerKpis').innerHTML = kpis.map(k => `
+    <div class="status-card" style="--card-c:var(${k.c});cursor:default;">
+      <div class="status-body">
+        <div class="status-label">${k.lbl}</div>
+        <div class="status-value num">${k.val}${fmtDelta(k.d)}</div>
+        <div class="status-pct" style="color:var(--text-dim);font-weight:500;">${k.sub}</div>
+      </div>
+    </div>`).join('');
+
+  renderGerIngresos(visitas, { refISO, minISO, curMk, inc, proyMes, vCur });
+  // ventana de análisis: mes actual + 5 anteriores
+  const ventIni = gMesAdd(curMk, -5) + '-01';
+  const rowsV = rows.filter(r => r.fApertura >= ventIni);
+  const visV = visitas.filter(v => v.fecha >= ventIni);
+  const ventTxt = `desde ${gMesNombre(ventIni.slice(0,7))} ${ventIni.slice(0,4)} hasta el ${gFecha(refISO)}`;
+  renderGerDow(dowProm(84), minISO);
+  renderGerTiposModelos(visV, ventTxt);
+  renderGerMotivos(rowsV, ventTxt, curMk);
+  renderGerKmTiles(rowsV, visV, ventTxt);
+  renderGerProyeccion(visitas, rows, { curMk, inc, proyMes, refISO });
+}
+
+function renderGerIngresos(visitas, ctx){
+  const { refISO, minISO, curMk, inc, proyMes, vCur } = ctx;
+  let keys, keyOf, label;
+  if(gerPeriodo === 'mes'){
+    keys = Array.from({length:7}, (_,i) => gMesAdd(curMk, -6+i)).filter(k => k >= minISO.slice(0,7));
+    keyOf = v => v.fecha.slice(0,7); label = k => gMesCorto(k) + (inc.has(k) ? '*' : '') + (k === curMk ? ' (en curso)' : '');
+  } else if(gerPeriodo === 'semana'){
+    const ult = ejPeriodKey(refISO, 'semana');
+    keys = Array.from({length:26}, (_,i) => gAdd(ult, -7*(25-i))).filter(k => gAdd(k,6) >= minISO);
+    keyOf = v => ejPeriodKey(v.fecha, 'semana'); label = k => ejPeriodLabel(k, 'semana');
+  } else {
+    const cont = {}; visitas.forEach(v => cont[v.fecha] = 1);
+    keys = Array.from({length:45}, (_,i) => gAdd(refISO, -44+i)).filter(k => k >= minISO && (gD(k).getDay() !== 0 || cont[k]));
+    keyOf = v => v.fecha; label = k => `${DOW[gD(k).getDay()]} ${k.slice(8,10)}/${k.slice(5,7)}`;
+  }
+  const idx = new Map(keys.map((k,i) => [k,i]));
+  const data = {}; VEH_TIPOS.forEach(t => data[t] = keys.map(() => 0));
+  visitas.forEach(v => { const i = idx.get(keyOf(v)); if(i !== undefined) data[v.tipo][i]++; });
+  const tot = keys.map((_,i) => VEH_TIPOS.reduce((s,t) => s + data[t][i], 0));
+  const sf = cssVar('--surface');
+  const datasets = VEH_TIPOS.map(t => ({ label:t, data:data[t], backgroundColor:cssVar(VEH_COLOR[t]), borderColor:sf, borderWidth:1, stack:'v', borderRadius:2 }));
+  const resto = Math.max(0, proyMes - vCur);
+  if(gerPeriodo === 'mes' && resto > 0 && keys[keys.length-1] === curMk){
+    datasets.push({ label:'Proyección resto del mes', data:keys.map(k => k === curMk ? resto : 0), backgroundColor:withAlpha(cssVar('--text-dim'), 0.16), borderColor:withAlpha(cssVar('--text-dim'), 0.6), borderWidth:1, stack:'v', borderRadius:2 });
+  }
+  document.getElementById('gerLeyenda').innerHTML = datasets.map(d => `<span><i style="background:${d.backgroundColor};${d.label.startsWith('Proy')?'border:1px dashed '+d.borderColor:''}"></i>${d.label}</span>`).join('');
+  const titulo = { mes:'Ingresos de vehículos por mes (últimos 6 meses y el actual)', semana:'Ingresos de vehículos por semana (últimas 26)', dia:'Ingresos de vehículos por día (últimos 45 días)' }[gerPeriodo];
+  document.getElementById('gerIngresosTitulo').textContent = titulo;
+  chartGerIngresos = gerChart(chartGerIngresos, document.getElementById('chartGerIngresos'), {
+    type:'bar',
+    data:{ labels: keys.map(k => gerPeriodo === 'mes' ? [label(k), gNum(tot[idx.get(k)]) + (k === curMk && resto ? ` → ~${gNum(proyMes)}` : '')] : label(k)), datasets },
+    options:{ maintainAspectRatio:false, interaction:{ mode:'index', intersect:false },
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{
+        title: items => { const k = keys[items[0].dataIndex]; return gerPeriodo === 'dia' ? `${DOW_LARGO[gD(k).getDay()]} ${gFecha(k)}` : (gerPeriodo === 'semana' ? `Semana del ${gFecha(k)}` : `${gMesNombre(k)} ${k.slice(0,4)}`); },
+        label: c => c.raw ? ` ${c.dataset.label}: ${gNum(c.raw)}` : null,
+        footer: items => `Total: ${gNum(tot[items[0].dataIndex])} vehículos` } } },
+      scales:{ ...gerEjes(), x:{ ...gerEjes().x, stacked:true }, y:{ ...gerEjes().y, stacked:true } } }
+  });
+  const prom = tot.length ? tot.reduce((a,b) => a+b, 0) / tot.length : 0;
+  document.getElementById('gerIngresosNota').textContent = (gerPeriodo === 'mes'
+      ? `Debajo de cada mes, el total de vehículos${resto ? '; en el mes en curso, la flecha indica la proyección de cierre' : ''}.`
+      : `Promedio del período: ${gNum(prom,1)} vehículos por ${gerPeriodo === 'dia' ? 'día' : 'semana'}.`)
+    + (gerPeriodo === 'mes' && [...inc].some(k => keys.includes(k)) ? ' * Mes con datos incompletos en la base.' : '');
+  // tabla
+  const filasT = keys.map((k,i) => ({ k, i })).reverse();
+  document.getElementById('gerIngresosTabla').innerHTML = `<thead><tr><th>Período</th>${VEH_TIPOS.map(t => `<th class="num">${t}</th>`).join('')}<th class="num">Total</th><th class="num">vs anterior</th></tr></thead><tbody>` +
+    filasT.map(({k,i}) => { const d = i > 0 && tot[i-1] ? (tot[i]/tot[i-1]-1)*100 : null;
+      return `<tr><td>${typeof label(k) === 'string' ? label(k) : k}</td>${VEH_TIPOS.map(t => `<td class="num hcell">${gNum(data[t][i])}</td>`).join('')}<td class="num hcell"><b>${gNum(tot[i])}</b></td><td class="num">${d === null ? '—' : `<span style="color:var(${d>=0?'--ok':'--danger'})">${d>=0?'+':'−'}${gNum(Math.abs(d))}%</span>`}</td></tr>`; }).join('') + '</tbody>';
+}
+
+function renderGerDow(prom, minISO){
+  const orden = [1,2,3,4,5,6,0].filter(i => i !== 0 || prom[0] > 0);
+  const vals = orden.map(i => +prom[i].toFixed(1));
+  const lab = orden.map(i => DOW[i]);
+  const habiles = orden.filter(i => i >= 1 && i <= 5);
+  const max = habiles.reduce((a,b) => prom[b] > prom[a] ? b : a, habiles[0]);
+  const min = habiles.reduce((a,b) => prom[b] < prom[a] ? b : a, habiles[0]);
+  document.getElementById('gerDowInsight').innerHTML = prom[max]
+    ? `El <b>${DOW_LARGO[max]}</b> es el día más cargado (<b>${gNum(prom[max],1)}</b> vehículos en promedio) y el <b>${DOW_LARGO[min]}</b> el más tranquilo (${gNum(prom[min],1)}).${prom[6] ? ` Los sábados entran ${gNum(prom[6],1)}.` : ''}`
+    : 'Sin ingresos en las últimas 12 semanas.';
+  document.getElementById('gerDowNota').textContent = 'Promedio de las últimas 12 semanas (incluye días sin ingresos, como feriados).';
+  chartGerDow = gerChart(chartGerDow, document.getElementById('chartGerDow'), {
+    type:'bar', plugins:[ChartDataLabels],
+    data:{ labels:lab, datasets:[{ data:vals, backgroundColor:cssVar('--mod-gerencia'), borderRadius:4, maxBarThickness:46 }] },
+    options:{ maintainAspectRatio:false, layout:{ padding:{ top:18 } },
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: c => ` ${gNum(c.raw,1)} vehículos por día` } },
+        datalabels:{ anchor:'end', align:'end', color:cssVar('--text'), font:{ size:11, family:'JetBrains Mono', weight:'600' }, formatter: v => gNum(v,1) } },
+      scales:gerEjes() }
+  });
+}
+
+function renderGerTiposModelos(visV, ventTxt){
+  const n = visV.length;
+  const porTipo = {}; VEH_TIPOS.forEach(t => porTipo[t] = 0);
+  const porFam = {};
+  visV.forEach(v => { porTipo[v.tipo]++; const f = porFam[v.familia] || (porFam[v.familia] = { n:0, tipo:v.tipo }); f.n++; });
+  const pct = x => n ? Math.round(x / n * 100) : 0;
+  const camionetas = porTipo['SUV'] + porTipo['Pick-up'] + porTipo['Utilitario / otro'];
+  document.getElementById('gerTipos').innerHTML = n ? `
+    <div class="ger-insight"><b>${pct(porTipo['Auto'])}%</b> autos y <b>${pct(camionetas)}%</b> camionetas (SUV ${pct(porTipo['SUV'])}%, pick-up ${pct(porTipo['Pick-up'])}%, utilitarios y otros ${pct(porTipo['Utilitario / otro'])}%) · ${gNum(n)} ingresos ${ventTxt}.</div>
+    <div class="ger-split">${VEH_TIPOS.filter(t => porTipo[t]).map(t => `<i style="width:${porTipo[t]/n*100}%;background:var(${VEH_COLOR[t]})" title="${t}: ${gNum(porTipo[t])} (${pct(porTipo[t])}%)"></i>`).join('')}</div>
+    <div class="ger-leyenda" style="margin:0;">${VEH_TIPOS.map(t => `<span><i style="background:var(${VEH_COLOR[t]})"></i>${t} ${gNum(porTipo[t])}</span>`).join('')}</div>` : '<div class="ger-insight">Sin ingresos en el período.</div>';
+  const top = Object.entries(porFam).sort((a,b) => b[1].n - a[1].n).slice(0, 10);
+  const maxF = top.length ? top[0][1].n : 1;
+  document.getElementById('gerModelos').innerHTML = top.map(([f, o]) => `
+    <div class="conc-row" style="cursor:default;" title="${f}: ${gNum(o.n)} ingresos (${pct(o.n)}%) · ${o.tipo}">
+      <div style="min-width:0;"><div class="conc-name"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(${VEH_COLOR[o.tipo]});margin-right:7px;"></i>${f} <span style="color:var(--text-dim);font-size:11px;">${o.tipo}</span></div>
+        <div class="caso-bar"><i style="width:${Math.max(2, o.n/maxF*100).toFixed(1)}%;background:var(--mod-gerencia)"></i></div></div>
+      <div class="conc-pct">${pct(o.n)}%<small style="display:block;font-size:10.5px;color:var(--text-dim)">${gNum(o.n)}</small></div>
+    </div>`).join('');
+}
+
+function renderGerMotivos(rowsV, ventTxt, curMk){
+  const meses = Array.from({length:6}, (_,i) => gMesAdd(curMk, -5+i));
+  const g = {};
+  rowsV.forEach(r => {
+    const m = gerInfo(r).motivo;
+    const o = g[m] || (g[m] = { n:0, mes:{}, fact:0, monto:0, hs:0, cerr:0, dias:0 });
+    o.n++; const mk = r.fApertura.slice(0,7); o.mes[mk] = (o.mes[mk]||0) + 1;
+    if(r.estado === 'Facturada'){ o.fact++; o.monto += gMonto(r); o.hs += Number(r.horaFacturadas)||0; }
+    if(r.estado !== 'Abierta'){ o.cerr++; o.dias += Number(r.diasTaller)||0; }
+  });
+  const total = rowsV.length;
+  const filas = Object.entries(g).sort((a,b) => b[1].n - a[1].n);
+  const activo = filterState.gerencia.motivo.size === 1 ? [...filterState.gerencia.motivo][0] : null;
+  document.getElementById('gerMotivosCount').textContent = `${gNum(total)} órdenes ${ventTxt} · clic en un motivo para filtrar la sección`;
+  const maxPct = filas.length ? filas[0][1].n / total : 1;
+  document.getElementById('gerMotivosTabla').innerHTML = `<thead><tr><th>Motivo</th><th class="num">Órdenes</th><th>% del total</th><th title="Órdenes por mes de apertura; la última barra es el mes en curso">Últimos 6 meses</th><th class="num">Ticket prom.</th><th class="num">Hs fact. prom.</th><th class="num" title="Días en taller promedio, órdenes ya cerradas">Días en taller</th></tr></thead><tbody>` +
+    filas.map(([m, o]) => {
+      const maxMes = Math.max(1, ...meses.map(k => o.mes[k]||0));
+      const mini = `<span class="ger-mini" title="${meses.map(k => `${gMesCorto(k)}: ${o.mes[k]||0}`).join(' · ')}">${meses.map(k => `<i class="${k===curMk?'parcial':''}" style="height:${Math.max(2, (o.mes[k]||0)/maxMes*22)}px"></i>`).join('')}</span>`;
+      return `<tr class="${m===activo?'activo':''}">
+        <td class="mot" data-motivo="${encodeURIComponent(m)}">${m}</td>
+        <td class="num hcell">${gNum(o.n)}</td>
+        <td><span class="ger-pctbar"><i style="width:${(o.n/total/maxPct*100).toFixed(1)}%"></i></span>${gNum(o.n/total*100,1)}%</td>
+        <td>${mini}</td>
+        <td class="num hcell">${o.fact ? fmtMoney(o.monto/o.fact) : '—'}</td>
+        <td class="num hcell">${o.fact ? gNum(o.hs/o.fact,1) : '—'}</td>
+        <td class="num hcell">${o.cerr ? gNum(o.dias/o.cerr,1) : '—'}</td>
+      </tr>`; }).join('') + '</tbody>';
+  document.getElementById('gerMotivosNota').textContent = 'Se cuentan órdenes: una visita puede tener más de una (por ejemplo, service + accesorio). El service se reconoce por la tarea "SERVICIO xx.000 KM" aunque la orden sea de garantía. Ticket y horas: promedio de las órdenes ya facturadas. En el gráfico de barras, la última (más clara) es el mes en curso.';
+}
+
+function renderGerKmTiles(rowsV, visV, ventTxt){
+  // services por kilometraje
+  const serv = rowsV.map(kmService).filter(k => k !== null);
+  const buckets = {};
+  serv.forEach(k => { const b = k >= 100000 ? 100000 : k; buckets[b] = (buckets[b]||0) + 1; });
+  const ks = Object.keys(buckets).map(Number).sort((a,b) => a-b);
+  const hasta30 = serv.filter(k => k <= 30000).length;
+  const top = ks.reduce((a,b) => buckets[b] > (buckets[a]||0) ? b : a, ks[0]);
+  document.getElementById('gerKmInsight').innerHTML = serv.length
+    ? `<b>${gNum(serv.length)}</b> services ${ventTxt}. El <b>${Math.round(hasta30/serv.length*100)}%</b> es de hasta 30.000 km (vehículos nuevos, en garantía); el más frecuente es el de <b>${gNum(top)} km</b>.`
+    : 'No hay services con kilometraje en el período.';
+  chartGerKm = gerChart(chartGerKm, document.getElementById('chartGerKm'), {
+    type:'bar', plugins:[ChartDataLabels],
+    data:{ labels: ks.map(k => k >= 100000 ? '100k+' : (k/1000) + 'k'), datasets:[{ data: ks.map(k => buckets[k]), backgroundColor:cssVar('--mod-gerencia'), borderRadius:4, maxBarThickness:34 }] },
+    options:{ maintainAspectRatio:false, layout:{ padding:{ top:18 } },
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ title: it => `Service ${it[0].label.replace('k','.000 km').replace('100.000 km+','100.000 km o más')}`, label: c => ` ${gNum(c.raw)} services` } },
+        datalabels:{ anchor:'end', align:'end', color:cssVar('--text'), font:{ size:10.5, family:'JetBrains Mono', weight:'600' } } },
+      scales:gerEjes() }
+  });
+  // indicadores
+  const nV = visV.length;
+  const conTurno = visV.filter(v => v.turno).length;
+  const cerr = rowsV.filter(r => r.estado !== 'Abierta');
+  const dias = cerr.map(r => Number(r.diasTaller)||0);
+  const enElDia = dias.filter(d => d === 0).length;
+  const porChasis = {};
+  visV.forEach(v => { if(v.chasis) (porChasis[v.chasis] = porChasis[v.chasis] || new Set()).add(v.fecha); });
+  const vehs = Object.values(porChasis), volvieron = vehs.filter(s => s.size >= 2).length;
+  const kms = visV.map(v => v.km).filter(k => k > 100).sort((a,b) => a-b);
+  const medKm = kms.length ? kms[Math.floor(kms.length/2)] : 0;
+  const pct = (a,b) => b ? Math.round(a/b*100) + '%' : '—';
+  document.getElementById('gerTiles').innerHTML = [
+    { l:'Ingresos con turno', v:pct(conTurno, nV), s:`${gNum(conTurno)} de ${gNum(nV)} ingresos tenían turno asignado` },
+    { l:'Estadía en taller', v:dias.length ? gNum(dias.reduce((a,b)=>a+b,0)/dias.length,1) + ' días' : '—', s:`promedio de órdenes cerradas · ${pct(enElDia, dias.length)} se resuelve en el día` },
+    { l:'Vehículos que volvieron', v:pct(volvieron, vehs.length), s:`${gNum(volvieron)} de ${gNum(vehs.length)} vehículos ingresaron más de una vez en el período` },
+    { l:'Km mediano al ingreso', v:kms.length ? gNum(medKm) + ' km' : '—', s:'la mitad de los vehículos atendidos tiene menos de esos km (sin contar 0 km)' },
+  ].map(t => `<div class="ger-tile"><div class="lbl">${t.l}</div><div class="val">${t.v}</div><div class="sub">${t.s}</div></div>`).join('');
+  document.getElementById('gerTilesNota').textContent = `Período: ${ventTxt}.`;
+}
+
+function renderGerProyeccion(visitas, rows, ctx){
+  const { curMk, inc, proyMes, refISO } = ctx;
+  const porMes = {};
+  visitas.forEach(v => { const k = v.fecha.slice(0,7); porMes[k] = (porMes[k]||0) + 1; });
+  // últimos 6 meses completos y confiables (sin el mes en curso ni los incompletos)
+  const hist = Object.keys(porMes).filter(k => k < curMk && !inc.has(k)).sort().slice(-6);
+  const wrap = document.getElementById('gerProyChartWrap');
+  const ins = document.getElementById('gerProyInsight'), tabla = document.getElementById('gerProyTabla'), nota = document.getElementById('gerProyNota');
+  if(hist.length < 3){
+    ins.innerHTML = `Para proyectar los próximos meses hacen falta al menos <b>3 meses completos</b> en la base (hoy hay ${hist.length}). Mientras tanto, el cierre proyectado de ${gMesNombre(curMk)} es de <b>~${gNum(proyMes)}</b> vehículos (ver arriba). Cargá un Excel que incluya todas las órdenes de los últimos 6 meses.`;
+    wrap.classList.add('hidden'); tabla.innerHTML = ''; nota.textContent = '';
+    if(chartGerProy){ chartGerProy.destroy(); chartGerProy = null; }
+    return;
+  }
+  wrap.classList.remove('hidden');
+  const mesIdx = mk => (+mk.slice(0,4)) * 12 + (+mk.slice(5,7)) - 1;
+  const xs = hist.map(mesIdx), ys = hist.map(k => porMes[k]);
+  const n = xs.length, mx = xs.reduce((a,b)=>a+b,0)/n, my = ys.reduce((a,b)=>a+b,0)/n;
+  const b = xs.reduce((s,x,i) => s + (x-mx)*(ys[i]-my), 0) / Math.max(1e-9, xs.reduce((s,x) => s + (x-mx)**2, 0));
+  const a = my - b*mx;
+  const rmse = Math.sqrt(ys.reduce((s,y,i) => s + (y - (a + b*xs[i]))**2, 0) / n);
+  const margen = Math.max(rmse, my * 0.05);
+  const fut = [1,2,3].map(k => gMesAdd(curMk, k));
+  const pred = k => Math.max(0, a + b*mesIdx(k));
+  // órdenes por vehículo y ticket (últimos 3 meses facturados) para estimar facturación
+  const ini3 = gMesAdd(curMk, -3);
+  const ordPorVis = (() => { const rr = rows.filter(r => r.fApertura.slice(0,7) >= ini3 && r.fApertura.slice(0,7) < curMk); const vv = visitas.filter(v => v.fecha.slice(0,7) >= ini3 && v.fecha.slice(0,7) < curMk); return vv.length ? rr.length / vv.length : 1; })();
+  const fact3 = rows.filter(r => r.estado === 'Facturada' && r.fFacturacion && fechaRazonable(r.fFacturacion) && r.fFacturacion.slice(0,7) >= ini3 && r.fFacturacion.slice(0,7) < curMk);
+  const ticket3 = fact3.length ? fact3.reduce((s,r) => s + gMonto(r), 0) / fact3.length : 0;
+  const pctMes = my ? b / my * 100 : 0;
+  const tend = Math.abs(pctMes) < 1.5 ? 'están <b>estables</b>' : (b > 0 ? `vienen <b>creciendo</b> a razón de <b>${gNum(b)}</b> vehículos por mes (${gNum(pctMes,1)}% mensual)` : `vienen <b>cayendo</b> a razón de <b>${gNum(-b)}</b> vehículos por mes (${gNum(-pctMes,1)}% mensual)`);
+  const ultimo = fut[2];
+  ins.innerHTML = `En los últimos ${n} meses completos, los ingresos ${tend}. Si la tendencia se mantiene, <b>${gMesNombre(ultimo)}</b> cerraría con <b>~${gNum(pred(ultimo))}</b> vehículos (entre ${gNum(Math.max(0,pred(ultimo)-margen))} y ${gNum(pred(ultimo)+margen)}). Para ${gMesNombre(curMk)}, el ritmo actual da <b>~${gNum(proyMes)}</b>.`;
+  const labels = [...hist, curMk, ...fut];
+  const real = labels.map(k => hist.includes(k) ? porMes[k] : null);
+  const proy = labels.map(k => k === hist[hist.length-1] ? porMes[k] : (k === curMk ? proyMes : (fut.includes(k) ? Math.round(pred(k)) : null)));
+  const up = labels.map(k => fut.includes(k) ? Math.round(pred(k)+margen) : (k === curMk ? proyMes : null));
+  const lo = labels.map(k => fut.includes(k) ? Math.round(Math.max(0,pred(k)-margen)) : (k === curMk ? proyMes : null));
+  const cG = cssVar('--mod-gerencia'), cD = cssVar('--text-dim');
+  chartGerProy = gerChart(chartGerProy, document.getElementById('chartGerProy'), {
+    type:'line',
+    data:{ labels: labels.map(k => gMesCorto(k) + (k === curMk ? ' (en curso)' : '')), datasets:[
+      { label:'Rango probable', data:up, borderColor:'transparent', backgroundColor:withAlpha(cD, 0.14), pointRadius:0, fill:'+1', spanGaps:true },
+      { label:'_lo', data:lo, borderColor:'transparent', pointRadius:0, fill:false, spanGaps:true },
+      { label:'Real', data:real, borderColor:cG, backgroundColor:cG, borderWidth:2, pointRadius:4, pointBackgroundColor:cG, tension:.25 },
+      { label:'Proyección', data:proy, borderColor:cG, borderDash:[6,5], borderWidth:2, pointRadius:4, pointStyle:'circle', pointBackgroundColor:cssVar('--surface'), pointBorderColor:cG, tension:.25, spanGaps:true },
+    ] },
+    options:{ maintainAspectRatio:false, interaction:{ mode:'index', intersect:false },
+      plugins:{ legend:{ position:'bottom', labels:{ color:cssVar('--text-dim'), boxWidth:12, boxHeight:10, font:{size:11.5,family:'Inter'}, filter: it => it.text !== '_lo' } },
+        tooltip:{ callbacks:{ label: c => c.dataset.label === '_lo' || c.raw === null ? null : (c.dataset.label === 'Rango probable' ? ` Rango: ${gNum(lo[c.dataIndex])} a ${gNum(up[c.dataIndex])}` : ` ${c.dataset.label}: ${gNum(c.raw)} vehículos`) } } },
+      scales: gerEjes() }
+  });
+  const filas = [{ k:curMk, v:proyMes, lo:proyMes, hi:proyMes, nota:'según ritmo actual' }, ...fut.map(k => ({ k, v:Math.round(pred(k)), lo:Math.round(Math.max(0,pred(k)-margen)), hi:Math.round(pred(k)+margen), nota:'tendencia' }))];
+  tabla.innerHTML = `<thead><tr><th>Mes</th><th class="num">Vehículos</th><th class="num">Rango</th><th class="num">Órdenes estimadas</th><th class="num">Facturación estimada</th><th>Base</th></tr></thead><tbody>` +
+    filas.map(f => `<tr><td>${gMesNombre(f.k)} ${f.k.slice(0,4)}</td><td class="num hcell"><b>${gNum(f.v)}</b></td><td class="num hcell">${f.lo === f.hi ? '—' : `${gNum(f.lo)} a ${gNum(f.hi)}`}</td><td class="num hcell">${gNum(f.v*ordPorVis)}</td><td class="num hcell">${ticket3 ? fmtMoney(f.v*ordPorVis*ticket3) : '—'}</td><td style="color:var(--text-dim)">${f.nota}</td></tr>`).join('') + '</tbody>';
+  nota.textContent = `Tendencia lineal sobre ${hist.map(gMesCorto).join(', ')}. El rango refleja cuánto se apartaron los meses reales de la tendencia. Órdenes: ${gNum(ordPorVis,2)} por vehículo; facturación: ticket promedio de los últimos 3 meses (${ticket3 ? fmtMoney(ticket3) : '—'}) a valores de hoy, sin inflación. No contempla estacionalidad (vacaciones, fin de año): con 12 meses o más de historia se puede incorporar.`;
+}
+
+document.getElementById('gerUniversoSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button'); if(!btn) return;
+  gerUniverso = btn.dataset.u;
+  document.querySelectorAll('#gerUniversoSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  applyFilters('gerencia');
+});
+document.getElementById('gerPeriodoSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button'); if(!btn) return;
+  gerPeriodo = btn.dataset.p;
+  document.querySelectorAll('#gerPeriodoSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  renderGerencia();
+});
+document.getElementById('gerMotivosTabla').addEventListener('click', e => {
+  const td = e.target.closest('td.mot'); if(!td) return;
+  const val = decodeURIComponent(td.dataset.motivo), sel = filterState.gerencia.motivo;
+  filterState.gerencia.motivo = (sel.size === 1 && sel.has(val)) ? new Set() : new Set([val]);
+  syncMultiSelectUI('gerencia', FILTER_CONFIGS.find(c => c.key === 'motivo'));
+  applyFilters('gerencia');
+});
+
+/* ============ EJECUTIVO: EXTERNA VS GARANTÍA ============ */
+let segActivo = 'EXTERNA';        // EXTERNA | GARANTÍA
+let segOrden = 'efic';            // efic (menor primero) | perdida (más hs no facturadas primero)
+const SEG_MIN_HS = 5;             // asesores con menos hs trabajadas en el segmento: poco volumen para juzgar
+
+/** Compara Externa y Garantía y rankea a los asesores del segmento elegido. Mismo criterio que las
+    cards: eficiencia y horas no facturadas sobre órdenes con marcación; las facturadas sin marcación
+    se informan aparte. Respeta los filtros del Ejecutivo. */
+function renderEjecutivoSegmentos(facturadas){
+  const hsT = r => Number(r.tiempoTotalHrs) || 0, hsF = r => Number(r.horaFacturadas) || 0;
+  const fmt = h => h.toLocaleString('es-AR', { minimumFractionDigits:1, maximumFractionDigits:1 });
+  const fmtPct = e => e === null ? '—' : e.toFixed(1).replace('.',',') + '%';
+  const acum = () => ({ n:0, t:0, f:0, perd:0, smN:0, smH:0 });
+  const sumar = (a, r) => { const t = hsT(r), f = hsF(r); a.n++;
+    if(t > 0){ a.t += t; a.f += f; a.perd += Math.max(0, t - f); } else if(f > 0){ a.smN++; a.smH += f; } };
+  const efic = a => a.t >= 0.1 ? a.f / a.t * 100 : null;
+
+  const segs = { 'EXTERNA': acum(), 'GARANTÍA': acum() };
+  const porAsesor = {};
+  facturadas.forEach(r => {
+    if(!segs[r.tipologia]) return;
+    sumar(segs[r.tipologia], r);
+    if(r.tipologia === segActivo){
+      const a = porAsesor[r.asesor] || (porAsesor[r.asesor] = { asesor:r.asesor, sucs:{}, ...acum() });
+      sumar(a, r); a.sucs[r.sucursal] = (a.sucs[r.sucursal]||0) + 1;
+    }
+  });
+
+  const nombreSeg = k => k === 'EXTERNA' ? 'Externa' : 'Garantía';
+  document.getElementById('segCards').innerHTML = Object.entries(segs).map(([k, a]) => {
+    const e = efic(a);
+    return `<button type="button" class="seg-card ${k===segActivo?'activo':''}" data-seg="${k}" title="Ver el ranking de asesores en ${nombreSeg(k)}">
+      <div class="seg-top"><span class="seg-name">${nombreSeg(k)} · ${a.n.toLocaleString('es-AR')} órdenes facturadas</span>
+        ${e !== null ? `<span class="dm-pill dm-${eficNivel(e)}">${e >= EF_OK ? 'en objetivo' : 'debajo del objetivo'}</span>` : ''}</div>
+      <div class="seg-efic">${fmtPct(e)} <span style="font-size:12px;font-weight:500;color:var(--text-dim);font-family:Inter">eficiencia</span></div>
+      <div class="seg-nums">
+        <div><b>${fmt(a.t)}</b>hs trabajadas</div>
+        <div><b>${fmt(a.f)}</b>hs facturadas</div>
+        <div><b>${fmt(a.perd)}</b>hs no facturadas</div>
+        <div><b>${fmt(a.smH)}</b>fact. sin marcación</div>
+      </div>
+    </button>`;
+  }).join('');
+
+  let filas = Object.values(porAsesor);
+  const pocos = filas.filter(a => a.t < SEG_MIN_HS);
+  filas = filas.filter(a => a.t >= SEG_MIN_HS)
+    .sort((x,y) => segOrden === 'perdida' ? y.perd - x.perd : efic(x) - efic(y));
+  const debajo = filas.filter(a => efic(a) < EF_OK);
+  document.getElementById('segRankTitulo').textContent =
+    `Asesores en ${nombreSeg(segActivo)} · ${debajo.length} de ${filas.length} debajo de ${EF_OK}%`;
+
+  const escala = Math.max(150, ...filas.map(a => efic(a) || 0));  // el 100% queda siempre a la vista
+  const asesorActivo = filterState.ejecutivo.asesor.size === 1 ? [...filterState.ejecutivo.asesor][0] : null;
+  const head = `<div class="seg-row head"><div>Asesor</div><div>Eficiencia (línea = ${EF_OK}%)</div><div class="n"></div>
+    <div class="n">Hs trab.</div><div class="n">Hs fact.</div><div class="n">No fact.</div></div>`;
+  document.getElementById('segRank').innerHTML = filas.length ? head + safeRowsHtml(filas, a => {
+    const e = efic(a), nombre = titleCase(a.asesor);
+    const suc = Object.entries(a.sucs).sort((x,y) => y[1]-x[1]).map(x => x[0]).join(' / ');
+    return `<div class="seg-row ${a.asesor===asesorActivo?'activo':''}" data-asesor="${encodeURIComponent(a.asesor)}"
+        title="${nombre} en ${nombreSeg(segActivo)}: ${a.n} órdenes · ${fmt(a.t)} hs trabajadas · ${fmt(a.f)} hs facturadas · ${fmt(a.perd)} hs no facturadas${a.smN ? ` · ${a.smN} facturadas sin marcación (${fmt(a.smH)} hs)` : ''} · clic para filtrar el Ejecutivo">
+      <div class="nm">${nombre}<small>${suc} · ${a.n} órdenes</small></div>
+      <div class="efic-track"><i class="${eficNivel(e)}" style="width:${Math.min(100, e/escala*100).toFixed(1)}%"></i><span class="meta" style="left:${(EF_OK/escala*100).toFixed(1)}%"></span></div>
+      <div class="n"><span class="dm-pill dm-${eficNivel(e)}">${fmtPct(e)}</span></div>
+      <div class="n">${fmt(a.t)}</div><div class="n">${fmt(a.f)}</div>
+      <div class="n" style="color:var(${a.perd >= 0.05 ? '--danger' : '--text-dim'})">${a.perd >= 0.05 ? '−' + fmt(a.perd) : '0,0'}</div>
+    </div>`;
+  }) : '<div class="empty-state" style="padding:40px 20px;"><p>Sin órdenes de este segmento con los filtros actuales.</p></div>';
+
+  document.getElementById('segNota').textContent =
+    `"No fact." = horas trabajadas que no se facturaron (suma por orden). Eficiencia sobre órdenes con marcación.`
+    + (pocos.length ? ` ${pocos.length} asesor(es) con menos de ${SEG_MIN_HS} hs trabajadas en ${nombreSeg(segActivo)} no se listan por bajo volumen.` : '')
+    + ` Para segmentar todo el Ejecutivo, usá el filtro Tipología de arriba.`;
+}
+document.getElementById('segCards').addEventListener('click', e => {
+  const c = e.target.closest('.seg-card'); if(!c) return;
+  segActivo = c.dataset.seg;
+  renderEjecutivoSegmentos(ejFacturadasActuales());
+});
+document.getElementById('segOrdenSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button'); if(!btn) return;
+  segOrden = btn.dataset.orden;
+  document.querySelectorAll('#segOrdenSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  renderEjecutivoSegmentos(ejFacturadasActuales());
+});
+document.getElementById('segRank').addEventListener('click', e => {
+  const row = e.target.closest('.seg-row[data-asesor]'); if(!row) return;
+  const val = decodeURIComponent(row.dataset.asesor), sel = filterState.ejecutivo.asesor;
+  filterState.ejecutivo.asesor = (sel.size === 1 && sel.has(val)) ? new Set() : new Set([val]);
+  syncMultiSelectUI('ejecutivo', FILTER_CONFIGS.find(c => c.key === 'asesor'));
+  applyFilters('ejecutivo');
+});
+
+/* ============ EJECUTIVO: CASOS MÁS SIGNIFICATIVOS ============ */
+let casosModo = 'perdida'; // perdida | sinmarc
+const CASOS_TOP = 15;
+
+/** Ranking de las órdenes que más pesan + dónde se concentran.
+    - perdida: órdenes con marcación que facturaron menos de lo trabajado → hs trabajadas − facturadas.
+    - sinmarc: órdenes facturadas sin tiempo registrado → hs facturadas (no se sabe cuánto se trabajó). */
+function renderEjecutivoCasos(facturadas){
+  const hsT = r => Number(r.tiempoTotalHrs) || 0, hsF = r => Number(r.horaFacturadas) || 0;
+  const fmt = h => h.toLocaleString('es-AR', { minimumFractionDigits:1, maximumFractionDigits:1 });
+  const pct = (a,b) => b ? Math.round(a/b*100) + '%' : '—';
+  const items = (casosModo === 'perdida'
+      ? facturadas.filter(r => hsT(r) > 0 && hsT(r) > hsF(r)).map(r => ({ r, v: hsT(r) - hsF(r) }))
+      : facturadas.filter(r => hsT(r) === 0 && hsF(r) > 0).map(r => ({ r, v: hsF(r) })))
+    .filter(x => casosModo === 'sinmarc' || x.v >= 0.05) // pérdidas de menos de 3 min no son un caso
+    .sort((a,b) => b.v - a.v);
+  const total = items.reduce((s,x) => s + x.v, 0);
+
+  const vacio = !items.length;
+  document.getElementById('casosEmpty').classList.toggle('hidden', !vacio);
+  document.getElementById('casosGrid').classList.toggle('hidden', vacio);
+  document.getElementById('casosStats').classList.toggle('hidden', vacio);
+  if(vacio) return;
+
+  // Cuántas órdenes (las más grandes) alcanzan para explicar la mitad del total
+  let acum = 0, nMitad = 0;
+  for(const x of items){ acum += x.v; nMitad++; if(acum >= total/2) break; }
+  const agrupar = campo => { const m = {}; items.forEach(x => { const k = x.r[campo] || '(sin dato)'; m[k] = (m[k]||0) + x.v; }); return Object.entries(m).sort((a,b) => b[1]-a[1]); };
+  const porSub = agrupar('subtipologia'), porAse = agrupar('asesor');
+
+  const esPerd = casosModo === 'perdida';
+  document.getElementById('casosStats').innerHTML = `
+    <div class="caso-stat"><b>${fmt(total)} hs</b><span>${esPerd ? 'trabajadas y no facturadas' : 'facturadas sin tiempo registrado'} en ${items.length.toLocaleString('es-AR')} órdenes</span></div>
+    <div class="caso-stat"><b>${nMitad.toLocaleString('es-AR')} órdenes</b><span>explican la mitad de esas horas (${pct(nMitad, items.length)} de las órdenes ${esPerd ? 'con pérdida' : 'sin marcación'})</span></div>
+    <div class="caso-stat"><b>${pct(porSub[0][1], total)} · ${porSub[0][0]}</b><span>la subtipología que más concentra${porAse.length ? ` · asesor: ${titleCase(porAse[0][0])} (${pct(porAse[0][1], total)})` : ''}</span></div>`;
+
+  document.getElementById('casosListaTitulo').textContent = esPerd
+    ? `Las ${Math.min(CASOS_TOP, items.length)} órdenes con más horas no facturadas`
+    : `Las ${Math.min(CASOS_TOP, items.length)} órdenes con más horas facturadas sin marcación`;
+  const max = items[0].v;
+  document.getElementById('casosLista').innerHTML = safeRowsHtml(items.slice(0, CASOS_TOP).map((x,i) => ({...x, i})), ({r, v, i}) => {
+    const detalle = esPerd
+      ? `${fmt(hsT(r))} hs trabajadas → ${fmt(hsF(r))} facturadas (${(hsF(r)/hsT(r)*100).toFixed(0)}%)`
+      : `${fmt(hsF(r))} hs facturadas · 0:00 marcadas`;
+    return `<div class="caso-row" data-orden="${encodeURIComponent(r.orden)}" title="Ver la orden ${r.orden} en el detalle · Cliente: ${(titleCase(r.cliente)||'—').replace(/"/g,'&quot;')}">
+      <div class="caso-rank">${i+1}</div>
+      <div style="min-width:0;">
+        <div class="caso-l1"><strong>${r.orden}</strong>${titleCase(r.asesor)} · ${r.sucursal}</div>
+        <div class="caso-l2">${r.subtipologia} · ${r.patente || 's/patente'} · facturada ${fmtDate(r.fFacturacion)} · ${detalle}</div>
+        <div class="caso-bar"><i style="width:${Math.max(2, v/max*100).toFixed(1)}%"></i></div>
+      </div>
+      <div class="caso-val">${esPerd ? '−' : ''}${fmt(v)} hs<small>${pct(v, total)} del total</small></div>
+    </div>`;
+  });
+
+  const conc = (lista, key, fmtName) => {
+    const activo = filterState.ejecutivo[key].size === 1 ? [...filterState.ejecutivo[key]][0] : null;
+    return lista.slice(0, 6).map(([k, v]) => `
+      <div class="conc-row ${k===activo?'activo':''}" data-key="${key}" data-val="${encodeURIComponent(k)}" title="${fmtName(k)}: ${fmt(v)} hs · clic para filtrar el Ejecutivo">
+        <div style="min-width:0;"><div class="conc-name">${fmtName(k)}</div><div class="caso-bar"><i style="width:${Math.max(2, v/lista[0][1]*100).toFixed(1)}%"></i></div></div>
+        <div class="conc-pct">${pct(v, total)}<small style="display:block;font-size:10.5px;color:var(--text-dim)">${fmt(v)} hs</small></div>
+      </div>`).join('');
+  };
+  document.getElementById('casosPorSubtipo').innerHTML = conc(porSub, 'subtipologia', k => k);
+  document.getElementById('casosPorAsesor').innerHTML = conc(porAse, 'asesor', k => titleCase(k));
+}
+
+document.getElementById('casosSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  casosModo = btn.dataset.modo;
+  document.querySelectorAll('#casosSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  renderEjecutivoCasos(ejFacturadasActuales());
+});
+// Clic en un caso: abre el detalle completo con esa orden
+document.getElementById('casosLista').addEventListener('click', e => {
+  const row = e.target.closest('.caso-row');
+  if(!row) return;
+  const det = document.getElementById('ordenEjDetails');
+  det.open = true;
+  ordenEjSel = 'todas';
+  document.querySelectorAll('#ordenEjSelector button').forEach(b => b.classList.toggle('active', b.dataset.sel === 'todas'));
+  document.getElementById('ordenEjSearchBox').value = decodeURIComponent(row.dataset.orden);
+  renderEjecutivoOrdenes(ejFacturadasActuales());
+  det.scrollIntoView({ behavior:'smooth', block:'start' });
+});
+// Clic en una subtipología o asesor: filtra todo el Ejecutivo (otro clic quita el filtro)
+['casosPorSubtipo','casosPorAsesor'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+  const row = e.target.closest('.conc-row');
+  if(!row) return;
+  const key = row.dataset.key, val = decodeURIComponent(row.dataset.val);
+  const sel = filterState.ejecutivo[key];
+  filterState.ejecutivo[key] = (sel.size === 1 && sel.has(val)) ? new Set() : new Set([val]);
+  syncMultiSelectUI('ejecutivo', FILTER_CONFIGS.find(c => c.key === key));
+  applyFilters('ejecutivo');
+}));
+
+/* ============ EJECUTIVO: DETALLE ORDEN POR ORDEN ============ */
+let ordenEjSel = 'todas';                  // todas | debajo | sinmarc
+let ordenEjSort = { key:'fFacturacion', dir:-1 };
+const ORDEN_EJ_MAX = 500;
+const ejFacturadasActuales = () => computeFiltered('ejecutivo').filter(r => r.estado==='Facturada');
+
+/** Una fila por orden facturada (respeta los filtros del Ejecutivo). Mismo criterio que las cards:
+    eficiencia = hs facturadas / hs trabajadas, solo si la orden tiene marcación (≥ 6 min). */
+function renderEjecutivoOrdenes(facturadas){
+  const hsT = r => Number(r.tiempoTotalHrs) || 0, hsF = r => Number(r.horaFacturadas) || 0;
+  const conMarc = r => hsT(r) > 0;                                    // igual que las cards
+  const eficOrden = r => hsT(r) >= 0.1 ? hsF(r) / hsT(r) * 100 : null;  // < 6 min: % sin sentido
+  const difOrden = r => conMarc(r) ? hsF(r) - hsT(r) : null;
+  const totalPesos = r => (Number(r.moFacturada)||0) + (Number(r.moExterna)||0) + (Number(r.matFacturado)||0) + (Number(r.matExterno)||0);
+
+  const q = document.getElementById('ordenEjSearchBox').value.trim().toUpperCase();
+  let rows = facturadas;
+  if(ordenEjSel === 'debajo') rows = rows.filter(r => { const e = eficOrden(r); return e !== null && e < EF_OK; });
+  else if(ordenEjSel === 'sinmarc') rows = rows.filter(r => !conMarc(r) && hsF(r) > 0);
+  if(q) rows = rows.filter(r => [r.orden, r.patente, r.cliente].some(v => (v||'').toString().toUpperCase().includes(q)));
+
+  const val = { orden:r => Number(r.orden) || 0, fFacturacion:r => r.fFacturacion || '', asesor:r => r.asesor || '', sucursal:r => r.sucursal || '',
+                subtipologia:r => r.subtipologia || '', trab:hsT, fact:hsF,
+                dif:r => difOrden(r) ?? Infinity, efic:r => eficOrden(r) ?? Infinity, pesos:totalPesos }[ordenEjSort.key];
+  rows = rows.slice().sort((a,b) => { const x = val(a), y = val(b);
+    return (typeof x === 'string' ? x.localeCompare(y) : x - y) * ordenEjSort.dir; });
+
+  // Totales del conjunto visible (no solo de las primeras filas mostradas)
+  const tT = rows.reduce((s,r) => s + (conMarc(r) ? hsT(r) : 0), 0);
+  const tF = rows.reduce((s,r) => s + (conMarc(r) ? hsF(r) : 0), 0);
+  const fmt = h => h.toLocaleString('es-AR', { minimumFractionDigits:1, maximumFractionDigits:1 });
+  document.getElementById('ordenEjCount').textContent = rows.length
+    ? `${rows.length.toLocaleString('es-AR')} orden(es)` + (rows.length > ORDEN_EJ_MAX ? ` · se muestran las primeras ${ORDEN_EJ_MAX}` : '')
+      + (tT ? ` · eficiencia del conjunto ${ (tF/tT*100).toFixed(1).replace('.',',') }%` : '')
+    : '';
+  const vacio = !rows.length;
+  document.getElementById('ordenEjEmpty').classList.toggle('hidden', !vacio);
+  document.getElementById('ordenEjTable').classList.toggle('hidden', vacio);
+  if(vacio) return;
+
+  const th = (key, label, cls='', ayuda='') => `<th class="${cls} sortable ${ordenEjSort.key===key?'sorted':''}" data-sort="${key}" title="${ayuda ? ayuda + ' · ' : ''}Clic para ordenar">${label}${ordenEjSort.key===key ? (ordenEjSort.dir>0?' ▲':' ▼') : ''}</th>`;
+  document.getElementById('ordenEjHead').innerHTML = `<tr>
+    ${th('orden','Nº orden / patente','sticky-col','Pasá el mouse por la orden para ver el cliente')}${th('fFacturacion','Facturación')}
+    ${th('asesor','Asesor / sucursal')}${th('subtipologia','Subtipología')}
+    ${th('trab','Hs trabajadas','num')}${th('fact','Hs facturadas','num')}
+    ${th('dif','Diferencia','num','Hs facturadas − hs trabajadas (solo con marcación)')}
+    ${th('efic','Eficiencia','num',`Hs facturadas / hs trabajadas. Verde ≥ ${EF_OK}%, naranja ≥ ${EF_ALERTA}%, rojo menor`)}
+    ${th('pesos','Total $','num','Mano de obra + material facturados')}
+  </tr>`;
+
+  const dim = t => `<span style="color:var(--text-dim)">${t}</span>`;
+  document.getElementById('ordenEjBody').innerHTML = safeRowsHtml(rows.slice(0, ORDEN_EJ_MAX), r => {
+    const e = eficOrden(r), d = difOrden(r);
+    const difHtml = d === null ? dim('—') : (Math.abs(d) < 0.05 ? dim('0,0') : `<span style="color:var(${d>0?'--ok':'--danger'})">${d>0?'+':'−'}${fmt(Math.abs(d))}</span>`);
+    const eficHtml = e !== null ? `<span class="dm-pill dm-${eficNivel(e)}">${e.toFixed(1).replace('.',',')}%</span>`
+                   : (hsF(r) > 0 ? dim('Sin marcación') : dim('—'));
+    return `<tr>
+      <td class="sticky-col" title="Cliente: ${(titleCase(r.cliente) || '—').replace(/"/g,'&quot;')}">${r.orden}<span class="sub2">${r.patente || '—'}</span></td>
+      <td>${fmtDate(r.fFacturacion)}</td>
+      <td>${titleCase(r.asesor)}<span class="sub2">${r.sucursal}</span></td>
+      <td style="white-space:normal;min-width:160px;max-width:240px;">${r.subtipologia}</td>
+      <td class="num hcell">${conMarc(r) ? fmt(hsT(r)) : dim('0,0')}</td>
+      <td class="num hcell">${fmt(hsF(r))}</td>
+      <td class="num hcell">${difHtml}</td>
+      <td class="num">${eficHtml}</td>
+      <td class="num hcell">${fmtMoney(totalPesos(r))}</td>
+    </tr>`;
+  });
+}
+document.getElementById('ordenEjSearchBox').addEventListener('input', debounce(() => renderEjecutivoOrdenes(ejFacturadasActuales())));
+document.getElementById('ordenEjSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  ordenEjSel = btn.dataset.sel;
+  document.querySelectorAll('#ordenEjSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  if(ordenEjSel === 'debajo') ordenEjSort = { key:'dif', dir:1 };   // peores primero
+  renderEjecutivoOrdenes(ejFacturadasActuales());
+});
+document.getElementById('ordenEjHead').addEventListener('click', e => {
+  const th = e.target.closest('th.sortable');
+  if(!th) return;
+  const k = th.dataset.sort;
+  const asc = ['asesor','subtipologia','dif','efic'].includes(k);
+  ordenEjSort = ordenEjSort.key === k ? { key:k, dir:-ordenEjSort.dir } : { key:k, dir: asc ? 1 : -1 };
+  renderEjecutivoOrdenes(ejFacturadasActuales());
+});
+
 // Clic en un asesor: filtra todo el Ejecutivo por ese asesor (clic de nuevo = quitar filtro)
 document.getElementById('ejecutivoAsesorBody').addEventListener('click', e => {
   const td = e.target.closest('td.asesor-link');
@@ -3223,6 +4200,9 @@ function renderEjecutivo(){
   });
 
   renderEjecutivoAsesores(facturadas);
+  renderEjecutivoSegmentos(facturadas);
+  renderEjecutivoCasos(facturadas);
+  renderEjecutivoOrdenes(facturadas);
 }
 
 
