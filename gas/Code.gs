@@ -21,7 +21,7 @@
 const SHEET_NAME = 'Datos';
 const BACKUP_NAME = 'Datos_backup';   // copia de la carga anterior, por si hay que recuperar
 const TMP_NAME = 'Datos_tmp';
-const API_VERSION = 3;                // el tablero lo chequea antes de subir: si no coincide, no sube
+const API_VERSION = 4;                // el tablero lo chequea antes de subir: si no coincide, no sube
 
 // Campos que se guardan por cada orden (mismo orden que GAS_FIELDS en index.html)
 const FIELDS = [
@@ -34,7 +34,7 @@ const FIELDS = [
   'horaApertura','fMarcacion1','horaMarcacion1','fUltimaMarcacion','horaUltimaMarcacion',
   'fCierreJT','horaCierreJT','fFacturacion','fVale',
   'fTurno','horaTurno','horaPreRecepcion','horaRecepcion','horaFacturadas',
-  'modelo','km','chasis','diasTaller','tareas'
+  'modelo','km','chasis','diasTaller','tareas','dni'
 ];
 
 function getSheet_() {

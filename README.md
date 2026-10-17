@@ -74,9 +74,13 @@ Ingresos de vehículos (día / semana / mes, por tipo: auto, SUV, pick-up, utili
 mes anterior, proyección de cierre del mes y de los próximos 3 meses, motivos de visita, services por
 kilometraje e indicadores de servicio (turnos, estadía, recurrencia, km al ingreso).
 
-Usa columnas que se agregaron en la versión 3 del backend: Modelo, kilometraje, Chasis, Dias en taller y
-Tarea 1 a 9. Después de actualizar `Code.gs` hay que publicar una nueva versión del Apps Script y volver
+Incluye además "El negocio mes a mes" (12 meses con variación contra el mes anterior), modelos que vienen
+más o dejan de venir, y clientes y fidelización (clientes y vehículos más fieles, retención de 0 km y lista
+de services a vencer descargable en Excel).
+
+Usa columnas que se agregaron en las versiones 3 y 4 del backend: Modelo, kilometraje, Chasis, Dias en
+taller, Tarea 1 a 9 y DNI. Después de actualizar `Code.gs` hay que publicar una nueva versión del Apps Script y volver
 a cargar el Excel para que esos datos queden guardados en la hoja.
 
 Para que la evolución y la proyección sean reales, el Excel tiene que traer todas las órdenes abiertas en
-los últimos 6 meses. Los meses que vienen incompletos se detectan, se marcan con * y no se usan para proyectar.
+los últimos 12 meses calendario. Los meses que vienen incompletos se detectan, se marcan con * y no se usan para proyectar.

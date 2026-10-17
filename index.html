@@ -311,6 +311,25 @@ tbody tr:hover{background:var(--surface-alt);}
 .ger-pctbar{display:inline-block;width:70px;height:6px;border-radius:4px;background:var(--surface-alt);vertical-align:middle;margin-right:8px;overflow:hidden;}
 .ger-pctbar i{display:block;height:100%;background:var(--mod-gerencia);border-radius:4px;}
 details.ger-tabla summary{cursor:pointer;font-size:12px;color:var(--text-dim);margin-top:12px;}
+.ger-indice{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 18px;font-size:12.5px;}
+.ger-indice a{color:var(--text-dim);text-decoration:none;padding:5px 11px;border:1px solid var(--border);border-radius:99px;background:var(--surface);}
+.ger-indice a:hover{color:var(--text);border-color:var(--mod-gerencia);}
+#view-gerencia [id^="ger-sec-"]{scroll-margin-top:150px;}
+.mm-table td,.mm-table th{white-space:nowrap;padding:9px 9px;}
+.mm-table td.sticky-col,.mm-table th.sticky-col{padding-left:16px;}
+.mm-table td.mm-v{text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);}
+.mm-table td.mm-v small{display:block;font-size:10.5px;font-weight:600;}
+.mm-table td.mm-v small.up{color:var(--ok);} .mm-table td.mm-v small.down{color:var(--danger);} .mm-table td.mm-v small.flat{color:var(--text-dim);}
+.mm-table td.mm-v.parcial{color:var(--text-dim);}
+.mm-table td.mm-v.best{box-shadow:inset 0 -2px 0 var(--mod-gerencia);}
+.mm-table th.parcial{color:var(--text-dim);font-style:italic;}
+.mm-spark{display:block;margin-top:3px;}
+.ger-sub{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);margin:0 0 8px;}
+.ger-chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;background:var(--surface-alt);border:1px solid var(--border);color:var(--text-dim);}
+.ger-chip.ok{color:var(--ok);border-color:color-mix(in srgb, var(--ok) 45%, transparent);}
+.ger-chip.bad{color:var(--danger);border-color:color-mix(in srgb, var(--danger) 45%, transparent);}
+.ger-btn{background:var(--surface-alt);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;}
+.ger-btn:hover{border-color:var(--mod-gerencia);}
 /* Externa vs Garantía */
 .seg-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;}
 @media(max-width:800px){.seg-cards{grid-template-columns:1fr;}}
@@ -508,10 +527,14 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
       <span class="ger-cobertura" id="gerCobertura"></span>
     </div>
     <div class="ger-aviso hidden" id="gerAviso"></div>
+    <nav class="ger-indice" aria-label="Bloques de la sección">
+      <a href="#ger-sec-ingresos">Ingresos</a><a href="#ger-sec-mes">El negocio mes a mes</a><a href="#ger-sec-modelos">Modelos</a>
+      <a href="#ger-sec-motivos">Motivos de visita</a><a href="#ger-sec-clientes">Clientes y fidelización</a><a href="#ger-sec-proy">Proyección</a>
+    </nav>
 
     <div class="status-row cols-4 ger-kpi" id="gerKpis"></div>
 
-    <div class="panel" style="margin-bottom:26px;">
+    <div class="panel" style="margin-bottom:26px;" id="ger-sec-ingresos">
       <div class="panel-head" style="flex-wrap:wrap;gap:12px;">
         <h3 id="gerIngresosTitulo">Ingresos de vehículos</h3>
         <div class="pill-selector" id="gerPeriodoSelector">
@@ -528,6 +551,13 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
       </details>
     </div>
 
+    <div class="table-panel" style="margin-bottom:26px;" id="ger-sec-mes">
+      <div class="table-head"><h3>El negocio mes a mes</h3><span class="table-count" id="gerMesCount"></span></div>
+      <div class="ger-insight" style="padding:14px 20px 0;" id="gerMesInsight"></div>
+      <div class="table-scroll" style="max-height:none;"><table class="pivot-table mm-table" id="gerMesTabla"></table></div>
+      <div class="ger-nota" style="padding:0 20px 16px;" id="gerMesNota"></div>
+    </div>
+
     <div class="grid-2">
       <div class="panel">
         <div class="panel-head"><h3>Ingresos promedio por día de la semana</h3></div>
@@ -542,7 +572,14 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
       </div>
     </div>
 
-    <div class="table-panel" style="margin-bottom:26px;">
+    <div class="table-panel" style="margin-bottom:26px;" id="ger-sec-modelos">
+      <div class="table-head"><h3>Modelos: cuáles vienen más y cuáles dejan de venir</h3><span class="table-count" id="gerModTendCount"></span></div>
+      <div class="ger-insight" style="padding:14px 20px 0;" id="gerModTendInsight"></div>
+      <div class="table-scroll" style="max-height:520px;"><table class="pivot-table" id="gerModTendTabla"></table></div>
+      <div class="ger-nota" style="padding:0 20px 16px;" id="gerModTendNota"></div>
+    </div>
+
+    <div class="table-panel" style="margin-bottom:26px;" id="ger-sec-motivos">
       <div class="table-head">
         <h3>Motivos de visita</h3>
         <span class="table-count" id="gerMotivosCount"></span>
@@ -566,7 +603,29 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
       </div>
     </div>
 
-    <div class="panel" style="margin-bottom:26px;">
+    <div class="panel" style="margin-bottom:26px;" id="ger-sec-clientes">
+      <div class="panel-head"><h3>Clientes y fidelización</h3></div>
+      <div class="ger-tiles" id="gerCliTiles" style="grid-template-columns:repeat(4,1fr);margin-bottom:22px;"></div>
+      <div class="grid-2" style="margin-bottom:22px;">
+        <div>
+          <div class="seg-rank-head"><h4 class="ger-sub" style="margin:0;" id="gerFielTitulo">Los más fieles</h4>
+            <div class="pill-selector" id="gerFielSelector"><button type="button" data-f="cli" class="active">Clientes</button><button type="button" data-f="veh">Vehículos</button></div></div>
+          <div class="table-scroll" style="max-height:440px;"><table class="pivot-table" id="gerFielTabla"></table></div>
+        </div>
+        <div>
+          <h4 class="ger-sub">¿Vuelven los 0 km que entregamos?</h4>
+          <div class="ger-insight" id="gerRetInsight"></div>
+          <div class="table-scroll" style="max-height:380px;"><table class="pivot-table" id="gerRetTabla"></table></div>
+        </div>
+      </div>
+      <div class="seg-rank-head"><h4 class="ger-sub" style="margin:0;" id="gerLlamarTitulo">Para llamar: service a vencer</h4>
+        <button type="button" class="ger-btn" id="gerLlamarDescarga">Descargar lista (Excel)</button></div>
+      <div class="ger-insight" id="gerLlamarInsight"></div>
+      <div class="table-scroll" style="max-height:420px;"><table class="pivot-table" id="gerLlamarTabla"></table></div>
+      <div class="ger-nota" id="gerCliNota"></div>
+    </div>
+
+    <div class="panel" style="margin-bottom:26px;" id="ger-sec-proy">
       <div class="panel-head"><h3>Proyección</h3></div>
       <div class="ger-insight" id="gerProyInsight"></div>
       <div class="chart-wrap" style="height:300px;" id="gerProyChartWrap"><canvas id="chartGerProy"></canvas></div>
@@ -1525,7 +1584,7 @@ const GAS_FIELDS = [
   'horaApertura','fMarcacion1','horaMarcacion1','fUltimaMarcacion','horaUltimaMarcacion',
   'fCierreJT','horaCierreJT','fFacturacion','fVale',
   'fTurno','horaTurno','horaPreRecepcion','horaRecepcion','horaFacturadas',
-  'modelo','km','chasis','diasTaller','tareas'
+  'modelo','km','chasis','diasTaller','tareas','dni'
 ];
 const settingsMenu = document.getElementById('settingsMenu');
 const settingsToggle = document.getElementById('settingsToggle');
@@ -1576,7 +1635,7 @@ document.getElementById('gasUrlClear').addEventListener('click', () => {
 });
 
 /** Envía la base completa al backend (reemplaza toda la hoja). No bloquea la UI si falla. */
-const GAS_API_VERSION = 3; // debe coincidir con API_VERSION en gas/Code.gs
+const GAS_API_VERSION = 4; // debe coincidir con API_VERSION en gas/Code.gs
 
 /** Llamada JSONP genérica al Apps Script (el GET sí se puede leer vía JSONP). */
 function gasJsonp(params, timeoutMs = 90000){
@@ -1733,6 +1792,7 @@ function ingestRows(rows){
       km: toNumber(r['kilometraje']),
       chasis: (r['Chasis']||'').toString().trim().toUpperCase(),
       diasTaller: toNumber(r['Dias en taller']),
+      dni: (() => { const d = (r['DNI']===null||r['DNI']===undefined ? '' : r['DNI']).toString().trim(); return d === '0' ? '' : d; })(),
       tareas: [1,2,3,4,5,6,7,8,9].map(i => (r['Tarea '+i]||'').toString().trim().replace(/\s+/g,' ').toUpperCase())
                 .filter(Boolean).join(' | ').slice(0, 300),
       fTurno: excelDateToISO(r['Fecha turno']),
@@ -3444,10 +3504,12 @@ function gerVisitas(rows){
 function gerMesesIncompletos(visitasBase, minISO, curMk){
   const porMes = {};
   visitasBase.forEach(v => { const k = v.fecha.slice(0,7); porMes[k] = (porMes[k]||0) + 1; });
-  const completos = Object.keys(porMes).filter(k => k !== curMk);
-  const mejor = Math.max(0, ...completos.map(k => porMes[k]));
+  // todos los meses entre el primero de la base y el anterior al actual (los que no tienen ninguna orden también cuentan)
+  const completos = [];
+  for(let k = minISO.slice(0,7); k < curMk; k = gMesAdd(k, 1)) completos.push(k);
+  const mejor = Math.max(0, ...completos.map(k => porMes[k]||0));
   const inc = new Set();
-  completos.forEach(k => { if(porMes[k] < 0.4 * mejor) inc.add(k); });
+  completos.forEach(k => { if((porMes[k]||0) < 0.4 * mejor) inc.add(k); });
   if(+minISO.slice(8,10) > 3) inc.add(minISO.slice(0,7));
   return inc;
 }
@@ -3475,14 +3537,14 @@ function renderGerencia(){
 
   // ---- cobertura y aviso
   document.getElementById('gerCobertura').innerHTML = `Aperturas del <b>${gFecha(minISO)}</b> al <b>${gFecha(refISO)}</b> · los cálculos toman como "hoy" el <b>${gFecha(refISO)}</b>, último día con aperturas en la base`;
-  const ult6 = Array.from({length:6}, (_,i) => gMesAdd(curMk, -6+i));
+  const ult6 = Array.from({length:11}, (_,i) => gMesAdd(curMk, -11+i)); // 12 meses calendario: los 11 anteriores + el actual
   const incVisibles = ult6.filter(k => inc.has(k) && k >= minISO.slice(0,7));
   const sinDatos = ult6.filter(k => k < minISO.slice(0,7));
   const aviso = document.getElementById('gerAviso');
   const partes = [];
   if(incVisibles.length) partes.push(`<b>${incVisibles.map(gMesCorto).join(', ')}</b> ${incVisibles.length>1?'tienen':'tiene'} muchas menos órdenes que el resto: probablemente el Excel no las trae completas. Se marcan con * y no se usan para proyectar.`);
   if(sinDatos.length) partes.push(`La base no tiene aperturas de <b>${sinDatos.map(gMesCorto).join(', ')}</b>.`);
-  if(partes.length) partes.push('Para ver la evolución real de 6 meses, exportá del sistema todas las órdenes abiertas en ese período.');
+  if(partes.length) partes.push('Para ver la evolución real, exportá del sistema todas las órdenes abiertas en los últimos 12 meses.');
   aviso.innerHTML = partes.join(' ');
   aviso.classList.toggle('hidden', !partes.length);
 
@@ -3527,7 +3589,7 @@ function renderGerencia(){
 
   renderGerIngresos(visitas, { refISO, minISO, curMk, inc, proyMes, vCur });
   // ventana de análisis: mes actual + 5 anteriores
-  const ventIni = gMesAdd(curMk, -5) + '-01';
+  const ventIni = gMesAdd(curMk, -11) + '-01'; // 12 meses calendario (el actual y 11 anteriores)
   const rowsV = rows.filter(r => r.fApertura >= ventIni);
   const visV = visitas.filter(v => v.fecha >= ventIni);
   const ventTxt = `desde ${gMesNombre(ventIni.slice(0,7))} ${ventIni.slice(0,4)} hasta el ${gFecha(refISO)}`;
@@ -3535,6 +3597,9 @@ function renderGerencia(){
   renderGerTiposModelos(visV, ventTxt);
   renderGerMotivos(rowsV, ventTxt, curMk);
   renderGerKmTiles(rowsV, visV, ventTxt);
+  renderGerMesAMes(rows, visitas, { curMk, inc, refISO, minISO });
+  renderGerModelosTend(rows, visitas, { curMk, inc });
+  renderGerClientes(rows, { refISO, curMk });
   renderGerProyeccion(visitas, rows, { curMk, inc, proyMes, refISO });
 }
 
@@ -3542,7 +3607,7 @@ function renderGerIngresos(visitas, ctx){
   const { refISO, minISO, curMk, inc, proyMes, vCur } = ctx;
   let keys, keyOf, label;
   if(gerPeriodo === 'mes'){
-    keys = Array.from({length:7}, (_,i) => gMesAdd(curMk, -6+i)).filter(k => k >= minISO.slice(0,7));
+    keys = Array.from({length:13}, (_,i) => gMesAdd(curMk, -12+i)).filter(k => k >= minISO.slice(0,7));
     keyOf = v => v.fecha.slice(0,7); label = k => gMesCorto(k) + (inc.has(k) ? '*' : '') + (k === curMk ? ' (en curso)' : '');
   } else if(gerPeriodo === 'semana'){
     const ult = ejPeriodKey(refISO, 'semana');
@@ -3564,7 +3629,7 @@ function renderGerIngresos(visitas, ctx){
     datasets.push({ label:'Proyección resto del mes', data:keys.map(k => k === curMk ? resto : 0), backgroundColor:withAlpha(cssVar('--text-dim'), 0.16), borderColor:withAlpha(cssVar('--text-dim'), 0.6), borderWidth:1, stack:'v', borderRadius:2 });
   }
   document.getElementById('gerLeyenda').innerHTML = datasets.map(d => `<span><i style="background:${d.backgroundColor};${d.label.startsWith('Proy')?'border:1px dashed '+d.borderColor:''}"></i>${d.label}</span>`).join('');
-  const titulo = { mes:'Ingresos de vehículos por mes (últimos 6 meses y el actual)', semana:'Ingresos de vehículos por semana (últimas 26)', dia:'Ingresos de vehículos por día (últimos 45 días)' }[gerPeriodo];
+  const titulo = { mes:'Ingresos de vehículos por mes (últimos 12 meses y el actual)', semana:'Ingresos de vehículos por semana (últimas 26)', dia:'Ingresos de vehículos por día (últimos 45 días)' }[gerPeriodo];
   document.getElementById('gerIngresosTitulo').textContent = titulo;
   chartGerIngresos = gerChart(chartGerIngresos, document.getElementById('chartGerIngresos'), {
     type:'bar',
@@ -3631,7 +3696,7 @@ function renderGerTiposModelos(visV, ventTxt){
 }
 
 function renderGerMotivos(rowsV, ventTxt, curMk){
-  const meses = Array.from({length:6}, (_,i) => gMesAdd(curMk, -5+i));
+  const meses = Array.from({length:12}, (_,i) => gMesAdd(curMk, -11+i));
   const g = {};
   rowsV.forEach(r => {
     const m = gerInfo(r).motivo;
@@ -3645,7 +3710,7 @@ function renderGerMotivos(rowsV, ventTxt, curMk){
   const activo = filterState.gerencia.motivo.size === 1 ? [...filterState.gerencia.motivo][0] : null;
   document.getElementById('gerMotivosCount').textContent = `${gNum(total)} órdenes ${ventTxt} · clic en un motivo para filtrar la sección`;
   const maxPct = filas.length ? filas[0][1].n / total : 1;
-  document.getElementById('gerMotivosTabla').innerHTML = `<thead><tr><th>Motivo</th><th class="num">Órdenes</th><th>% del total</th><th title="Órdenes por mes de apertura; la última barra es el mes en curso">Últimos 6 meses</th><th class="num">Ticket prom.</th><th class="num">Hs fact. prom.</th><th class="num" title="Días en taller promedio, órdenes ya cerradas">Días en taller</th></tr></thead><tbody>` +
+  document.getElementById('gerMotivosTabla').innerHTML = `<thead><tr><th>Motivo</th><th class="num">Órdenes</th><th>% del total</th><th title="Órdenes por mes de apertura; la última barra es el mes en curso">Últimos 12 meses</th><th class="num">Ticket prom.</th><th class="num">Hs fact. prom.</th><th class="num" title="Días en taller promedio, órdenes ya cerradas">Días en taller</th></tr></thead><tbody>` +
     filas.map(([m, o]) => {
       const maxMes = Math.max(1, ...meses.map(k => o.mes[k]||0));
       const mini = `<span class="ger-mini" title="${meses.map(k => `${gMesCorto(k)}: ${o.mes[k]||0}`).join(' · ')}">${meses.map(k => `<i class="${k===curMk?'parcial':''}" style="height:${Math.max(2, (o.mes[k]||0)/maxMes*22)}px"></i>`).join('')}</span>`;
@@ -3758,6 +3823,256 @@ function renderGerProyeccion(visitas, rows, ctx){
     filas.map(f => `<tr><td>${gMesNombre(f.k)} ${f.k.slice(0,4)}</td><td class="num hcell"><b>${gNum(f.v)}</b></td><td class="num hcell">${f.lo === f.hi ? '—' : `${gNum(f.lo)} a ${gNum(f.hi)}`}</td><td class="num hcell">${gNum(f.v*ordPorVis)}</td><td class="num hcell">${ticket3 ? fmtMoney(f.v*ordPorVis*ticket3) : '—'}</td><td style="color:var(--text-dim)">${f.nota}</td></tr>`).join('') + '</tbody>';
   nota.textContent = `Tendencia lineal sobre ${hist.map(gMesCorto).join(', ')}. El rango refleja cuánto se apartaron los meses reales de la tendencia. Órdenes: ${gNum(ordPorVis,2)} por vehículo; facturación: ticket promedio de los últimos 3 meses (${ticket3 ? fmtMoney(ticket3) : '—'}) a valores de hoy, sin inflación. No contempla estacionalidad (vacaciones, fin de año): con 12 meses o más de historia se puede incorporar.`;
 }
+
+/* ---------- Gerencia: el negocio mes a mes ---------- */
+const gMonedaCorta = v => v >= 1e9 ? `$ ${gNum(v/1e9,2)} MM` : (v >= 1e6 ? `$ ${gNum(v/1e6,1)} M` : fmtMoney(v));
+/** Mini curva (SVG) con los valores de los meses completos. */
+function gSpark(vals){
+  const v = vals.filter(x => x !== null && isFinite(x));
+  if(v.length < 2) return '';
+  const w = 84, h = 20, mn = Math.min(...v), mx = Math.max(...v), rg = (mx - mn) || 1;
+  const pts = vals.map((x,i) => x === null || !isFinite(x) ? null : `${(i/(vals.length-1)*w).toFixed(1)},${(h - 2 - (x-mn)/rg*(h-4)).toFixed(1)}`).filter(Boolean).join(' ');
+  return `<svg class="mm-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--mod-gerencia)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+const gCliKey = r => { const d = String(r.dni||'').trim(); return d && d !== '0' ? 'D' + d : 'N' + (r.cliente||'').toUpperCase().replace(/\s+/g,' ').trim(); };
+
+function renderGerMesAMes(rows, visitas, ctx){
+  const { curMk, inc, refISO, minISO } = ctx;
+  const meses = Array.from({length:12}, (_,i) => gMesAdd(curMk, -11+i)).filter(k => k >= minISO.slice(0,7));
+  const M = {}; meses.forEach(k => M[k] = { veh:0, ord:0, cli:new Set(), serv:0, gar:0, ext:0, fact:0, pesos:0, hsF:0, eT:0, eF:0, dias:0, cerr:0 });
+  visitas.forEach(v => { const o = M[v.fecha.slice(0,7)]; if(o) o.veh++; });
+  rows.forEach(r => {
+    const o = M[r.fApertura.slice(0,7)];
+    if(o){ o.ord++; o.cli.add(gCliKey(r)); const m = gerInfo(r).motivo;
+      if(m === 'Service programado') o.serv++; if(m === 'Garantía (reparación)') o.gar++;
+      if((r.tipologia||'').toUpperCase() === 'EXTERNA') o.ext++;
+      if(r.estado !== 'Abierta'){ o.cerr++; o.dias += Number(r.diasTaller)||0; } }
+    if(r.estado === 'Facturada' && r.fFacturacion && fechaRazonable(r.fFacturacion)){
+      const f = M[r.fFacturacion.slice(0,7)];
+      if(f){ const t = Number(r.tiempoTotalHrs)||0, h = Number(r.horaFacturadas)||0; f.fact++; f.pesos += gMonto(r); f.hsF += h; if(t > 0){ f.eT += t; f.eF += h; } }
+    }
+  });
+  const filas = [
+    { l:'Vehículos ingresados', f:o => o.veh, fmt:v => gNum(v) },
+    { l:'Órdenes abiertas', f:o => o.ord, fmt:v => gNum(v) },
+    { l:'Clientes distintos', f:o => o.cli.size, fmt:v => gNum(v), t:'Por DNI (o nombre si no hay DNI)' },
+    { l:'Services programados', f:o => o.serv, fmt:v => gNum(v) },
+    { l:'Reparaciones en garantía', f:o => o.gar, fmt:v => gNum(v) },
+    { l:'Órdenes externas (paga el cliente)', f:o => o.ext, fmt:v => gNum(v) },
+    { l:'Órdenes facturadas', f:o => o.fact, fmt:v => gNum(v), t:'Por fecha de facturación' },
+    { l:'Facturación', f:o => o.pesos, fmt:gMonedaCorta, t:'Mano de obra + material, por fecha de facturación' },
+    { l:'Ticket promedio', f:o => o.fact ? o.pesos/o.fact : null, fmt:v => gMonedaCorta(v) },
+    { l:'Horas facturadas', f:o => o.hsF, fmt:v => gNum(v) },
+    { l:'Eficiencia', f:o => o.eT >= 0.1 ? o.eF/o.eT*100 : null, fmt:v => gNum(v,1) + '%', pp:true, t:'Hs facturadas / trabajadas, órdenes con marcación' },
+    { l:'Estadía promedio (días)', f:o => o.cerr ? o.dias/o.cerr : null, fmt:v => gNum(v,1), menos:true, t:'Días en taller de las órdenes ya cerradas; menos es mejor' },
+  ];
+  const completo = k => k !== curMk && !inc.has(k);
+  const delta = (fila, i) => {
+    if(i === 0 || !completo(meses[i]) || !completo(meses[i-1])) return '';
+    const a = fila.f(M[meses[i]]), b = fila.f(M[meses[i-1]]);
+    if(a === null || b === null) return '';
+    const d = fila.pp ? a - b : (b ? (a/b - 1) * 100 : null);
+    if(d === null) return '';
+    const bueno = fila.menos ? d < 0 : d > 0, plano = Math.abs(d) < (fila.pp ? 0.5 : 1);
+    if(plano) return `<small class="flat">= ${gNum(Math.abs(d), fila.pp ? 1 : 0)}${fila.pp ? ' pp' : '%'}</small>`;
+    return `<small class="${bueno ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${gNum(Math.abs(d), fila.pp ? 1 : 0)}${fila.pp ? ' pp' : '%'}</small>`;
+  };
+  const head = meses.map(k => `<th class="num ${completo(k) ? '' : 'parcial'}" title="${k === curMk ? `En curso, al ${gFecha(refISO)}` : (inc.has(k) ? 'Mes incompleto en la base' : '')}">${gMesCorto(k)}${k === curMk ? ` (al ${refISO.slice(8,10)})` : (inc.has(k) ? '*' : '')}</th>`).join('');
+  document.getElementById('gerMesTabla').innerHTML = `<thead><tr><th class="sticky-col">Indicador</th>${head}</tr></thead><tbody>` +
+    filas.map(fila => {
+      const vals = meses.map(k => fila.f(M[k]));
+      const comps = meses.map((k,i) => completo(k) ? vals[i] : null);
+      const valid = comps.filter(v => v !== null);
+      const best = valid.length ? (fila.menos ? Math.min(...valid) : Math.max(...valid)) : null;
+      return `<tr><td class="sticky-col" title="${fila.t || ''}">${fila.l}${gSpark(comps)}</td>` +
+        meses.map((k,i) => `<td class="mm-v ${completo(k) ? '' : 'parcial'} ${best !== null && comps[i] === best ? 'best' : ''}">${vals[i] === null ? '—' : fila.fmt(vals[i])}${delta(fila, i)}</td>`).join('') + '</tr>';
+    }).join('') + '</tbody>';
+
+  // resumen: últimos 3 meses completos vs los 3 anteriores
+  const comp = meses.filter(completo);
+  const ins = document.getElementById('gerMesInsight');
+  if(comp.length >= 6){
+    const u3 = comp.slice(-3), p3 = comp.slice(-6, -3);
+    const prom = (ks, f) => ks.reduce((s,k) => s + f(M[k]), 0) / ks.length;
+    const dV = (prom(u3, o => o.veh) / prom(p3, o => o.veh) - 1) * 100;
+    const pesosP = prom(p3, o => o.pesos), dP = pesosP ? (prom(u3, o => o.pesos) / pesosP - 1) * 100 : null;
+    const fmtD = d => `<b style="color:var(${d >= 0 ? '--ok' : '--danger'})">${d >= 0 ? '+' : '−'}${gNum(Math.abs(d),1)}%</b>`;
+    const mejor = comp.reduce((a,b) => M[b].veh > M[a].veh ? b : a), peor = comp.reduce((a,b) => M[b].veh < M[a].veh ? b : a);
+    ins.innerHTML = `En los últimos 3 meses completos (${u3.map(gMesCorto).join(', ')}) entraron <b>${gNum(prom(u3, o => o.veh))}</b> vehículos por mes, ${fmtD(dV)} contra los 3 anteriores` +
+      (dP !== null ? `; la facturación promedio fue <b>${gMonedaCorta(prom(u3, o => o.pesos))}</b> por mes (${fmtD(dP)})` : '') +
+      `. Mejor mes: <b>${gMesNombre(mejor)}</b> (${gNum(M[mejor].veh)} vehículos); el más flojo: <b>${gMesNombre(peor)}</b> (${gNum(M[peor].veh)}).`;
+  } else ins.innerHTML = comp.length ? `Hay ${comp.length} mes(es) completo(s) en la base; con 6 o más se compara el último trimestre contra el anterior.` : '';
+  document.getElementById('gerMesCount').textContent = `${meses.length} meses · variación contra el mes anterior`;
+  document.getElementById('gerMesNota').textContent = 'Debajo de cada valor, la variación contra el mes anterior (en verde lo que mejora: más volumen, más eficiencia, menos estadía). Subrayado: el mejor mes del indicador. La curva junto a cada indicador resume los meses completos. El mes en curso va en gris y sin variación porque está incompleto. Ingresos y órdenes por fecha de apertura; facturación, horas y eficiencia por fecha de facturación.';
+}
+
+/* ---------- Gerencia: modelos ---------- */
+let gerModOrden = { key:'total', dir:-1 };
+let _gerModCtx = null;
+function renderGerModelosTend(rows, visitas, ctx){
+  _gerModCtx = { rows, visitas, ctx };
+  const { curMk, inc } = ctx;
+  const meses = Array.from({length:12}, (_,i) => gMesAdd(curMk, -11+i));
+  const comp = meses.filter(k => k !== curMk && !inc.has(k));
+  const u3 = new Set(comp.slice(-3)), p3 = new Set(comp.slice(-6, -3));
+  const F = {};
+  const fam = f => F[f] || (F[f] = { f, tipo:'', mes:{}, total:0, v3:0, p3:0, ord:0, gar:0, fact:0, pesos:0 });
+  visitas.forEach(v => { const o = fam(v.familia); o.tipo = v.tipo; const k = v.fecha.slice(0,7); o.mes[k] = (o.mes[k]||0) + 1; o.total++; if(u3.has(k)) o.v3++; if(p3.has(k)) o.p3++; });
+  rows.forEach(r => { const g = gerInfo(r), o = fam(g.familia); o.ord++; if(g.motivo === 'Garantía (reparación)') o.gar++; if(r.estado === 'Facturada'){ o.fact++; o.pesos += gMonto(r); } });
+  const lista = Object.values(F).filter(o => o.total > 0).map(o => ({ ...o, delta:o.v3 - o.p3, deltaPct:o.p3 ? (o.v3/o.p3 - 1)*100 : (o.v3 ? Infinity : 0), garPct:o.ord ? o.gar/o.ord*100 : 0, ticket:o.fact ? o.pesos/o.fact : 0 }));
+  const val = { f:o => o.f, total:o => o.total, v3:o => o.v3, delta:o => o.delta, deltaPct:o => o.deltaPct === Infinity ? 1e9 : o.deltaPct, garPct:o => o.garPct, ticket:o => o.ticket }[gerModOrden.key];
+  const poco = o => (o.v3 + o.p3) < 10; // al ordenar por variación, los de poco volumen van al final
+  lista.sort((a,b) => { if((gerModOrden.key === 'deltaPct' || gerModOrden.key === 'delta') && poco(a) !== poco(b)) return poco(a) ? 1 : -1;
+    const x = val(a), y = val(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * gerModOrden.dir; });
+  const ins = document.getElementById('gerModTendInsight');
+  if(p3.size === 3){
+    const rel = lista.filter(o => o.p3 >= 10 || o.v3 >= 10);
+    const suben = rel.filter(o => o.deltaPct > 5).sort((a,b) => b.deltaPct - a.deltaPct).slice(0,3);
+    const bajan = rel.filter(o => o.deltaPct < -5).sort((a,b) => a.deltaPct - b.deltaPct).slice(0,3);
+    const txt = o => `<b>${o.f}</b> (${o.deltaPct === Infinity ? 'nuevo' : (o.deltaPct > 0 ? '+' : '−') + gNum(Math.abs(o.deltaPct)) + '%'})`;
+    const gar = lista.filter(o => o.ord >= 30).sort((a,b) => b.garPct - a.garPct)[0];
+    ins.innerHTML = [
+      suben.length ? `Vienen más: ${suben.map(txt).join(', ')}.` : 'Ningún modelo con volumen relevante creció más de 5%.',
+      bajan.length ? `Dejan de venir: ${bajan.map(txt).join(', ')}.` : 'Ningún modelo con volumen relevante cayó más de 5%.',
+      gar ? `Más reparaciones de garantía en proporción: <b>${gar.f}</b> (${gNum(gar.garPct,1)}% de sus órdenes).` : ''
+    ].join(' ');
+  } else ins.innerHTML = 'Para comparar trimestres hacen falta al menos 6 meses completos en la base.';
+  const rango = ks => [...ks].length ? `${gMesCorto([...ks][0])}–${gMesCorto([...ks][[...ks].length-1])}` : '—';
+  const th = (k, l, cls='num', t='') => `<th class="${cls} sortable ${gerModOrden.key===k?'sorted':''}" data-sort="${k}" title="${t ? t + ' · ' : ''}Clic para ordenar">${l}${gerModOrden.key===k ? (gerModOrden.dir>0?' ▲':' ▼') : ''}</th>`;
+  const tabla = document.getElementById('gerModTendTabla');
+  tabla.innerHTML = `<thead><tr>${th('f','Modelo','sticky-col')}<th>Tipo</th>${th('total','Ingresos 12 m')}<th title="Ingresos por mes, últimos 12 (el último es el mes en curso)">Mes a mes</th>${th('v3', 'Últ. 3 meses', 'num', rango(u3))}<th class="num" title="${rango(p3)}">3 anteriores</th>${th('deltaPct','Variación')}${th('garPct','% garantía','num','Órdenes de reparación en garantía sobre el total de órdenes del modelo')}${th('ticket','Ticket prom.','num','Promedio de las órdenes facturadas')}</tr></thead><tbody>` +
+    lista.map(o => {
+      const mx = Math.max(1, ...meses.map(k => o.mes[k]||0));
+      const mini = `<span class="ger-mini" title="${meses.map(k => `${gMesCorto(k)}: ${o.mes[k]||0}`).join(' · ')}">${meses.map(k => `<i class="${k===curMk||inc.has(k)?'parcial':''}" style="height:${Math.max(2,(o.mes[k]||0)/mx*22)}px"></i>`).join('')}</span>`;
+      const d = o.deltaPct;
+      const dTxt = p3.size !== 3 ? '—' : (d === Infinity ? '<span class="ger-chip ok">nuevo</span>' : (o.p3 + o.v3 < 10 ? `<span style="color:var(--text-dim)">${d>0?'+':d<0?'−':''}${gNum(Math.abs(d))}%</span>` : `<span style="color:var(${d>5?'--ok':d<-5?'--danger':'--text-dim'})">${d>0?'▲ +':d<0?'▼ −':''}${gNum(Math.abs(d))}%</span>`));
+      return `<tr><td class="sticky-col"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(${VEH_COLOR[o.tipo]});margin-right:7px;"></i>${o.f}</td><td style="color:var(--text-dim)">${o.tipo}</td>
+        <td class="num hcell">${gNum(o.total)}</td><td>${mini}</td><td class="num hcell">${gNum(o.v3)}</td><td class="num hcell">${gNum(o.p3)}</td><td class="num">${dTxt}</td>
+        <td class="num hcell">${o.ord ? gNum(o.garPct,1) + '%' : '—'}</td><td class="num hcell">${o.fact ? gMonedaCorta(o.ticket) : '—'}</td></tr>`;
+    }).join('') + '</tbody>';
+  document.getElementById('gerModTendCount').textContent = `${lista.length} modelos · clic en un encabezado para ordenar`;
+  document.getElementById('gerModTendNota').textContent = `Ingresos = vehículos. "Últ. 3 meses" (${rango(u3)}) contra "3 anteriores" (${rango(p3)}), solo meses completos. Variaciones con menos de 10 ingresos en total se muestran en gris (poco volumen para sacar conclusiones).`;
+}
+
+/* ---------- Gerencia: clientes y fidelización ---------- */
+// Quedan afuera Maipú (internas) y las aseguradoras (en siniestros figuran como cliente)
+const GER_NO_CLIENTE = /MAIPU|VOLKSWAGEN ARG|VOLKSWAGEN S\.?A|SEGURO|ASEGURADORA|CIA\.? ?DE ?SEG|\bSEG\b|ZURICH|SAN CRISTOBAL|FEDERACION PATRONAL|SANCOR|RIVADAVIA|MAPFRE|ALLIANZ|LA SEGUNDA|MERIDIONAL|LA CAJA|PROVINCIA SEGUROS|SEGUROS RIVADAVIA|COOPERACION SEG|HDI|LIBRA SEG|INTEGRITY|RIO URUGUAY/;
+let gerFiel = 'cli';
+let _gerLlamar = [];
+const gDiasEntre = (a, b) => Math.round((gD(b) - gD(a)) / 86400000);
+function renderGerClientes(rows, ctx){
+  const { refISO } = ctx;
+  // empleados del taller que figuran como cliente (movimientos internos): mismo nombre que un asesor
+  const empleados = new Set(RAW.map(r => normName(r.asesor)));
+  const cli = rows.filter(r => { const m = gerInfo(r).motivo, n = (r.cliente||'').toUpperCase(); return m !== 'Chapa y pintura' && m !== 'Preentrega 0 km' && m !== 'Interna / usados' && !GER_NO_CLIENTE.test(n) && !empleados.has(normName(r.cliente)); });
+  // por cliente y por vehículo
+  const C = {}, V = {};
+  cli.forEach(r => {
+    const ck = gCliKey(r), vk = r.chasis || ('OT' + r.orden), g = gerInfo(r);
+    const c = C[ck] || (C[ck] = { nombre:{}, dni:String(r.dni||''), veh:new Set(), vis:new Set(), serv:0, pesos:0, ult:'', fams:{} });
+    c.nombre[r.cliente] = (c.nombre[r.cliente]||0) + 1; c.veh.add(vk); c.vis.add(vk + '|' + r.fApertura);
+    if(g.motivo === 'Service programado') c.serv++; if(r.estado === 'Facturada') c.pesos += gMonto(r);
+    if(r.fApertura > c.ult) c.ult = r.fApertura; c.fams[g.familia] = (c.fams[g.familia]||0) + 1;
+    if(!r.chasis) return;
+    const v = V[vk] || (V[vk] = { chasis:vk, patente:'', familia:g.familia, cliente:r.cliente, dni:String(r.dni||''), fechas:new Set(), serv:0, pesos:0, ult:'', ultRows:[], km:0 });
+    v.fechas.add(r.fApertura); if(g.motivo === 'Service programado') v.serv++; if(r.estado === 'Facturada') v.pesos += gMonto(r);
+    if(r.fApertura > v.ult){ v.ult = r.fApertura; v.ultRows = []; }
+    if(r.fApertura === v.ult){ v.ultRows.push(r); v.cliente = r.cliente; if(r.patente && !/SIN DATO/i.test(r.patente)) v.patente = r.patente; }
+    v.km = Math.max(v.km, Number(r.km)||0);
+  });
+  const clientes = Object.values(C), vehs = Object.values(V);
+  const fieles = clientes.filter(c => c.vis.size >= 2).length;
+  const totalPesos = clientes.reduce((s,c) => s + c.pesos, 0);
+  const top20 = clientes.slice().sort((a,b) => b.pesos - a.pesos).slice(0, Math.max(1, Math.ceil(clientes.length * 0.2))).reduce((s,c) => s + c.pesos, 0);
+
+  // retención de 0 km: chasis con preentrega y si volvió después como cliente (no accesorios), al menos 15 días después
+  const todos = RAW.filter(r => !/ANULADA/i.test(r.estado||'') && r.fApertura && fechaRazonable(r.fApertura) && r.chasis);
+  const entrega = {}, visitasCh = {};
+  todos.forEach(r => { const m = gerInfo(r).motivo;
+    if(m === 'Preentrega 0 km'){ if(!entrega[r.chasis] || r.fApertura < entrega[r.chasis]) entrega[r.chasis] = r.fApertura; }
+    else if(m !== 'Accesorios' && m !== 'Interna / usados') (visitasCh[r.chasis] = visitasCh[r.chasis] || []).push(r.fApertura); });
+  const cohortes = {};
+  Object.entries(entrega).forEach(([ch, f]) => { const k = f.slice(0,7); const o = cohortes[k] || (cohortes[k] = { n:0, volv:0 }); o.n++;
+    if((visitasCh[ch]||[]).some(x => gDiasEntre(f, x) >= 15)) o.volv++; });
+  const cks = Object.keys(cohortes).sort();
+  const edad = k => (+refISO.slice(0,4) - +k.slice(0,4)) * 12 + (+refISO.slice(5,7) - +k.slice(5,7));
+  const maduras = cks.filter(k => edad(k) >= 6);
+  const mN = maduras.reduce((s,k) => s + cohortes[k].n, 0), mV = maduras.reduce((s,k) => s + cohortes[k].volv, 0);
+  document.getElementById('gerRetInsight').innerHTML = !cks.length ? 'No hay preentregas en la base.'
+    : (mN ? `De los <b>${gNum(mN)}</b> 0 km entregados hace 6 meses o más, volvió al taller el <b>${Math.round(mV/mN*100)}%</b>. Los entregados más recientemente todavía no llegaron a su primer service.` : 'Todavía no hay entregas con 6 meses de antigüedad para medir si vuelven.');
+  document.getElementById('gerRetTabla').innerHTML = cks.length ? `<thead><tr><th>Entregados en</th><th class="num">0 km</th><th class="num">Volvieron</th><th class="num">%</th><th>Antigüedad</th></tr></thead><tbody>` +
+    cks.slice().reverse().map(k => { const o = cohortes[k], e = edad(k), p = o.n ? o.volv/o.n*100 : 0;
+      return `<tr style="${e < 6 ? 'color:var(--text-dim)' : ''}"><td>${gMesNombre(k)} ${k.slice(0,4)}</td><td class="num hcell">${gNum(o.n)}</td><td class="num hcell">${gNum(o.volv)}</td>
+        <td class="num">${e >= 6 ? `<span class="dm-pill dm-${p >= 60 ? 'ok' : p >= 40 ? 'warn' : 'bad'}">${gNum(p)}%</span>` : gNum(p) + '%'}</td><td>${e} ${e === 1 ? 'mes' : 'meses'}${e < 6 ? ' · todavía no le toca' : ''}</td></tr>`; }).join('') + '</tbody>' : '';
+
+  // para llamar: último ingreso fue un service y pasaron 9 meses o más sin volver
+  _gerLlamar = vehs.map(v => {
+    const serv = v.ultRows.find(r => gerInfo(r).motivo === 'Service programado');
+    if(!serv) return null;
+    const dias = gDiasEntre(v.ult, refISO);
+    if(dias < 270) return null;
+    return { v, r:serv, dias, kmServ:kmService(serv) };
+  }).filter(Boolean).sort((a,b) => b.dias - a.dias);
+  const vencidos = _gerLlamar.filter(x => x.dias > 365).length;
+  document.getElementById('gerLlamarTitulo').textContent = `Para llamar: service a vencer o vencido (${gNum(_gerLlamar.length)})`;
+  document.getElementById('gerLlamarInsight').innerHTML = _gerLlamar.length
+    ? `<b>${gNum(_gerLlamar.length)}</b> vehículos hicieron su último service hace 9 meses o más y no volvieron${vencidos ? ` (<b>${gNum(vencidos)}</b> ya pasaron el año)` : ''}. El service de VW se hace cada 12 meses o por kilometraje: es el momento de contactarlos.`
+    : 'No hay vehículos con el último service hace 9 meses o más (con una base de 12 meses, aparecen los que se atendieron en los primeros 3 meses y no volvieron).';
+  document.getElementById('gerLlamarDescarga').disabled = !_gerLlamar.length;
+  document.getElementById('gerLlamarTabla').innerHTML = _gerLlamar.length ? `<thead><tr><th class="sticky-col">Patente</th><th>Modelo</th><th>Cliente</th><th>Último service</th><th class="num">Hace</th><th class="num">Km último ingreso</th><th>Asesor</th></tr></thead><tbody>` +
+    safeRowsHtml(_gerLlamar.slice(0, 200), ({v, r, dias, kmServ}) => `<tr><td class="sticky-col">${v.patente || '—'}<span class="sub2">${v.chasis}</span></td><td>${v.familia}</td><td>${titleCase(v.cliente)}</td>
+      <td>${kmServ ? gNum(kmServ) + ' km' : 'service'} · ${gFecha(v.ult)}</td><td class="num"><span class="ger-chip ${dias > 365 ? 'bad' : ''}">${gNum(dias/30.4,1)} meses</span></td><td class="num hcell">${v.km ? gNum(v.km) : '—'}</td><td>${titleCase(r.asesor)}</td></tr>`) + '</tbody>' : '';
+
+  // tiles
+  const ret = mN ? Math.round(mV/mN*100) + '%' : '—';
+  document.getElementById('gerCliTiles').innerHTML = [
+    { l:'Clientes atendidos', v:gNum(clientes.length), s:`en ${gNum(vehs.length)} vehículos · sin Maipú, aseguradoras, fábrica ni empleados` },
+    { l:'Clientes que repiten', v:clientes.length ? Math.round(fieles/clientes.length*100) + '%' : '—', s:`${gNum(fieles)} vinieron 2 veces o más en el período` },
+    { l:'Concentración', v:totalPesos ? Math.round(top20/totalPesos*100) + '%' : '—', s:'de la facturación la hace el 20% de los clientes que más facturan' },
+    { l:'Retención 0 km', v:ret, s:'de los 0 km entregados hace 6+ meses volvió al taller' },
+  ].map(t => `<div class="ger-tile"><div class="lbl">${t.l}</div><div class="val">${t.v}</div><div class="sub">${t.s}</div></div>`).join('');
+
+  // ranking de fieles
+  const nombre = c => Object.entries(c.nombre).sort((a,b) => b[1]-a[1])[0][0];
+  const fams = c => Object.entries(c.fams).sort((a,b) => b[1]-a[1]).slice(0,2).map(x => x[0]).join(', ');
+  const tabla = document.getElementById('gerFielTabla');
+  if(gerFiel === 'cli'){
+    const top = clientes.slice().sort((a,b) => b.vis.size - a.vis.size || b.pesos - a.pesos).slice(0, 20);
+    document.getElementById('gerFielTitulo').textContent = 'Los 20 clientes más fieles';
+    tabla.innerHTML = `<thead><tr><th class="sticky-col">Cliente</th><th class="num">Visitas</th><th class="num">Vehículos</th><th class="num">Services</th><th class="num">Facturado</th><th>Última visita</th></tr></thead><tbody>` +
+      safeRowsHtml(top, c => `<tr><td class="sticky-col">${titleCase(nombre(c))}<span class="sub2">${fams(c)}${c.dni ? ' · DNI/CUIT ' + c.dni : ''}</span></td><td class="num hcell"><b>${c.vis.size}</b></td><td class="num hcell">${c.veh.size}</td><td class="num hcell">${c.serv}</td><td class="num hcell">${c.pesos ? gMonedaCorta(c.pesos) : '—'}</td><td>${gFecha(c.ult)}</td></tr>`) + '</tbody>';
+  } else {
+    const top = vehs.slice().sort((a,b) => b.fechas.size - a.fechas.size || b.pesos - a.pesos).slice(0, 20);
+    document.getElementById('gerFielTitulo').textContent = 'Los 20 vehículos que más vinieron';
+    tabla.innerHTML = `<thead><tr><th class="sticky-col">Vehículo</th><th>Cliente</th><th class="num">Visitas</th><th class="num">Services</th><th class="num">Km</th><th>Última visita</th></tr></thead><tbody>` +
+      safeRowsHtml(top, v => `<tr><td class="sticky-col">${v.familia} · ${v.patente || '—'}<span class="sub2">${v.chasis}</span></td><td>${titleCase(v.cliente)}</td><td class="num hcell"><b>${v.fechas.size}</b></td><td class="num hcell">${v.serv}</td><td class="num hcell">${v.km ? gNum(v.km) : '—'}</td><td>${gFecha(v.ult)}</td></tr>`) + '</tbody>';
+  }
+  document.getElementById('gerCliNota').textContent = 'Clientes y vehículos: sin internas, preentregas ni siniestros (en chapa y pintura la aseguradora figura como cliente), y sin Maipú, aseguradoras, la fábrica ni empleados del taller. Visitas = días distintos con al menos una orden. La retención de 0 km toma todo el taller (no aplica filtros): un 0 km "volvió" si tuvo otra orden (que no sea de accesorios) 15 días o más después de la entrega.';
+}
+
+document.getElementById('gerFielSelector').addEventListener('click', e => {
+  const btn = e.target.closest('button'); if(!btn) return;
+  gerFiel = btn.dataset.f;
+  document.querySelectorAll('#gerFielSelector button').forEach(b => b.classList.toggle('active', b===btn));
+  renderGerencia();
+});
+document.getElementById('gerModTendTabla').addEventListener('click', e => {
+  const th = e.target.closest('th.sortable'); if(!th || !_gerModCtx) return;
+  const k = th.dataset.sort;
+  gerModOrden = gerModOrden.key === k ? { key:k, dir:-gerModOrden.dir } : { key:k, dir: k === 'f' ? 1 : -1 };
+  renderGerModelosTend(_gerModCtx.rows, _gerModCtx.visitas, _gerModCtx.ctx);
+});
+document.getElementById('gerLlamarDescarga').addEventListener('click', () => {
+  if(!_gerLlamar.length) return;
+  const filas = _gerLlamar.map(({v, r, dias, kmServ}) => ({
+    'Patente': v.patente || '', 'Chasis': v.chasis, 'Modelo': v.familia, 'Cliente': titleCase(v.cliente), 'DNI/CUIT': v.dni,
+    'Último service': kmServ ? `${kmServ} km` : 'service', 'Fecha último service': gFecha(v.ult), 'Meses sin volver': +(dias/30.4).toFixed(1),
+    'Km último ingreso': v.km || '', 'Asesor': titleCase(r.asesor), 'Sucursal': r.sucursal, 'Nº orden': r.orden
+  }));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(filas), 'Para llamar');
+  XLSX.writeFile(wb, `vehiculos_para_llamar_${new Date().toISOString().slice(0,10)}.xlsx`);
+});
 
 document.getElementById('gerUniversoSelector').addEventListener('click', e => {
   const btn = e.target.closest('button'); if(!btn) return;
