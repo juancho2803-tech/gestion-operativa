@@ -1294,13 +1294,21 @@ function normalizeISODate(v){
 
 /* Igual que normalizeISODate pero para campos "HH:MM" que también pueden volver
    como ISO datetime completo tras pasar por Google Sheets */
+/* Google Sheets convierte las horas guardadas ("11:18") en una fecha del 30/12/1899 en el huso de la
+   planilla (Argentina, que para 1899 es -4:16:48) y Apps Script las devuelve en UTC: "1899-12-30T15:34:48Z".
+   Tomar la parte horaria de ese texto corría todas las horas +4:16. Se convierte a hora argentina
+   explícitamente, así da bien sin importar el huso de la computadora que abre el tablero. */
+const FMT_HORA_AR = new Intl.DateTimeFormat('en-GB', { timeZone:'America/Argentina/Buenos_Aires', hour:'2-digit', minute:'2-digit', hourCycle:'h23' });
 function normalizeHora(v){
   if(!v) return null;
+  if(v instanceof Date && !isNaN(v)){ const h = FMT_HORA_AR.format(v); return h === '00:00' ? null : h; }
   const s = v.toString().trim();
   if(!s) return null;
   if(s.includes('T')){
-    const timePart = s.split('T')[1];
-    return timePart ? timePart.slice(0,5) : null;
+    const d = new Date(s);
+    if(isNaN(d)) return null;
+    const h = FMT_HORA_AR.format(d);
+    return h === '00:00' ? null : h; // 00:00 = sin cargar, igual que al leer el Excel
   }
   const m = s.match(/^(\d{1,2}):(\d{2})/);
   return m ? `${m[1].padStart(2,'0')}:${m[2]}` : null;
