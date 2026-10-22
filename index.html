@@ -1051,7 +1051,7 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
               <th>Cierre JT</th><th>Demora</th>
               <th>Cierre Taller</th><th>Demora</th>
               <th>Facturación</th><th>Demora</th>
-              <th>Pedido fábrica</th><th>Estado pedido</th><th>Pre-carga logística</th>
+              <th>Pedido fábrica</th><th>Fecha pedido fábrica</th><th>Estado pedido</th><th>Pre-carga logística</th>
             </tr>
           </thead>
           <tbody id="trackeoTableBody"></tbody>
@@ -2568,6 +2568,7 @@ function renderTrackeo(){
       <td>${fmtDate(r.fFacturacion)}</td>
       ${demoraCell(minutosEntre(tCierreTaller, tFacturacion))}
       <td>${r.numeroPedido || '—'}</td>
+      <td>${fmtDate(r.fPedidoFabrica)}</td>
       <td>${r.estadoPedido || '—'}</td>
       <td>${fmtDate(r.fPreCarga)}</td>
     </tr>`;
