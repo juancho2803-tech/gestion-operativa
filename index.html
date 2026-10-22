@@ -1037,7 +1037,7 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
         <h3>Paso a paso por orden</h3>
         <div class="search-box" style="max-width:420px;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <input type="text" id="trackeoSearchBox" placeholder="Buscar por patente, cliente o Nº de orden...">
+          <input type="text" id="trackeoSearchBox" placeholder="Buscar por patente, cliente, modelo o Nº de orden...">
         </div>
         <span class="table-count" id="trackeoTableCount"></span>
       </div>
@@ -1045,7 +1045,7 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
         <table id="trackeoTable">
           <thead>
             <tr>
-              <th>Nº Orden</th><th>Cliente</th><th>Patente</th><th>Asesor</th><th>Sucursal</th><th>Tipología</th><th>Estado</th>
+              <th>Nº Orden</th><th>Cliente</th><th>Patente</th><th>Modelo</th><th>Asesor</th><th>Sucursal</th><th>Tipología</th><th>Estado</th>
               <th>Apertura</th><th>1° Marcación</th><th>Demora</th>
               <th>Última Marcación</th><th>Demora</th>
               <th>Cierre JT</th><th>Demora</th>
@@ -2522,6 +2522,8 @@ function renderAtencionTurnos(rows){
     </tr>`);
 }
 
+/** Modelo como viene del sistema pero sin puntos sueltos ("AMAROK..", "TERA ."); respeta decimales ("3.0L"). */
+function modeloLimpio(m){ return (m||'').toString().replace(/(?<!\d)\.|\.(?!\d)/g, ' ').replace(/\s+/g, ' ').trim(); }
 function renderTrackeo(){
   const rows = computeFiltered('trackeo');
   renderAtencionTurnos(rows);
@@ -2530,7 +2532,8 @@ function renderTrackeo(){
   if(q) shownRows = shownRows.filter(r =>
     (r.orden||'').toString().toUpperCase().includes(q) ||
     (r.patente||'').toString().toUpperCase().includes(q) ||
-    (r.cliente||'').toString().toUpperCase().includes(q)
+    (r.cliente||'').toString().toUpperCase().includes(q) ||
+    modeloLimpio(r.modelo).toUpperCase().includes(q)
   );
   document.getElementById('trackeoTableCount').textContent = `${shownRows.length.toLocaleString('es-AR')} orden(es)`;
   document.getElementById('trackeoEmptyState').classList.toggle('hidden', rows.length > 0);
@@ -2548,6 +2551,7 @@ function renderTrackeo(){
       <td>${r.orden}</td>
       <td>${titleCase(r.cliente)}</td>
       <td>${r.patente || '—'}</td>
+      <td>${modeloLimpio(r.modelo) || '—'}</td>
       <td>${titleCase(r.asesor)}</td>
       <td>${r.sucursal}</td>
       <td>${r.tipologia}</td>
