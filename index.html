@@ -1045,7 +1045,7 @@ details.det-panel > summary span.dim{font-weight:500;font-size:12px;color:var(--
         <table id="trackeoTable">
           <thead>
             <tr>
-              <th>Nº Orden</th><th>Cliente</th><th>Patente</th><th>Modelo</th><th>Asesor</th><th>Sucursal</th><th>Tipología</th><th>Estado</th>
+              <th>Nº Orden</th><th>Cliente</th><th>Patente</th><th class="num">Kilometraje</th><th>Modelo</th><th>Asesor</th><th>Sucursal</th><th>Tipología</th><th>Estado</th>
               <th>Apertura</th><th>1° Marcación</th><th>Demora</th>
               <th>Última Marcación</th><th>Demora</th>
               <th>Cierre JT</th><th>Demora</th>
@@ -2551,6 +2551,7 @@ function renderTrackeo(){
       <td>${r.orden}</td>
       <td>${titleCase(r.cliente)}</td>
       <td>${r.patente || '—'}</td>
+      <td class="num">${Number(r.km) > 0 ? Number(r.km).toLocaleString('es-AR') + ' km' : (r.km === 0 ? '0 km' : '—')}</td>
       <td>${modeloLimpio(r.modelo) || '—'}</td>
       <td>${titleCase(r.asesor)}</td>
       <td>${r.sucursal}</td>
